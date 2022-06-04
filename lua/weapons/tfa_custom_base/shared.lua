@@ -71,6 +71,21 @@ function SWEP:SightsPoseParameter()
 	end
 end
 
+----[[FREE VIEWMODEL]]----
+
+local freevm_var = CreateConVar("cl_tfa_debug_freevm", 0, {FCVAR_CLIENTCMD_CAN_EXECUTE, FCVAR_ARCHIVE})
+
+hook.Add("CalcViewModelView", "TFA_Debug_FreeVM", function(w, v, op, oa, p, a)
+	if freevm_var:GetFloat() == 1 then
+		if not fp then
+			fp, fa = Vector(p), Angle(a)
+		end
+
+		p:Set(fp)
+		a:Set(fa)
+	end
+end)
+
 ----[[THINK]]----
 
 function SWEP:Think(...)
