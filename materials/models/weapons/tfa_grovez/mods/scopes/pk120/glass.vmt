@@ -1,0 +1,18 @@
+"VertexlitGeneric"
+{
+	"$basetexture"					"models/weapons/tfa_grovez/mods/scopes/pk120/glass_d"
+	"$bumpmap"						"dev/bump_normal"
+	"$color2"						"[1 1 1]"
+	
+	"$envmap"						"env_cubemap"
+	"$envmaptint"					"[0.25 0.25 0.25]"
+
+	"$translucent"					"1"
+
+	"$phong"						"1"
+	"$phongexponent"				"500"
+	"$phongboost"					".5"
+	"$phongfresnelranges"			"[0.32 0.72 0.99]"
+}
+//Material setup by ShadowRUN 幸運な. 
+//You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.
