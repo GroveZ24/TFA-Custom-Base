@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture"				"models/weapons/tfa_grovez/mods/scopes/pk120/reticle2"
+	"$basetexture"				"models/weapons/tfa_grovez/mods/scopes/pk120/reticle"
 	"$detail"					"models/weapons/tfa_ins2/optics/laser_noise"
 	"$detailblendmode"			"2"
 	"$detailframe"				"0"

@@ -4,7 +4,7 @@ end
 
 ATTACHMENT.Name = "1П87"
 ATTACHMENT.ShortName = "ПК120"
-ATTACHMENT.Icon = "entities/grovez_sight_pk120.png"
+ATTACHMENT.Icon = "entities/grovez_scope_pk120.png"
 ATTACHMENT.Description = {}
 
 ATTACHMENT.WeaponTable = {
