@@ -8,21 +8,21 @@
 
 	"$envmap"					"env_cubemap"
 	"$envmapfresnel"			"0.25"
-	"$envmaptint"				"[0.25 0.25 0.25]"
-	"$normalmapalphaenvmapmask"	"1"
+	"$envmaptint"				"[0.1 0.1 0.1]"
+//	"$normalmapalphaenvmapmask"	"1"
 
 	"$phong"					"1"
-	"$phongexponent"			"500"
-	"$phongboost"				".5"
+	"$phongexponent"			"900"
+	"$phongboost"				"1"
 	"$phongfresnelranges"		"[0.32 0.72 0.99]"
 	
 	"Proxies"
 	{
 		"TFA_INS2_IronsightVectorResult"
 		{
-			"resultVar"		"$envmaptint"
-			"ResultDefault"	"0.0 0.1 0.2"
-			"ResultZoomed"	"0.0 0.05 0.1"
+			"resultVar"			"$envmaptint"
+			"ResultDefault"		"0.5 0.5 0.5"
+			"ResultZoomed"		"0.25 0.25 0.25"
 
 		}
 	}

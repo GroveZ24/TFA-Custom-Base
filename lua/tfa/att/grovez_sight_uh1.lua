@@ -17,7 +17,7 @@ ATTACHMENT.WeaponTable = {
 		},
 	},
 	["IronSightsPos"] = function(wep, val)
-		return val + Vector(0.1, 0, -1.245)
+		return val + Vector(0.11, 0, -1.22)
 	end,
 	["Secondary"] = {
 		["IronFOV"] = function(wep, val)
