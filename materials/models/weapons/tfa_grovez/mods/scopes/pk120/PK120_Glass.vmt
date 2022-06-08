@@ -21,8 +21,8 @@
 		"TFA_INS2_IronsightVectorResult"
 		{
 			"resultVar"			"$envmaptint"
-			"ResultDefault"		"50 50 50"
-			"ResultZoomed"		"25 25 25"
+			"ResultDefault"		"0.3 0.3 0.3"
+			"ResultZoomed"		"0.15 0.15 0.15"
 
 		}
 	}

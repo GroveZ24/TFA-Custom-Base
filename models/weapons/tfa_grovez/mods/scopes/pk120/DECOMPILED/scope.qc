@@ -19,7 +19,10 @@ $cdmaterials "models/weapons/tfa_grovez/mods/scopes/pk120/"
 $attachment "scope" "mod_scope" 0 0 0 rotate 0 0 0
 
 //DEFINEBONE
- 
+$definebone "mod_scope" "" 0.000000 0.000000 0.000000 -0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 -0.000000 0.000000 0.000000
+$definebone "mod_scope_lens" "mod_scope" 0.000000 1.444613 1.773900 -0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 -0.000000 0.000000 0.000000
+$definebone "mod_scope_reticle" "mod_scope" 0.000000 0.367125 1.773900 -0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 -0.000000 0.000000 0.000000
+
 //BONEMERGE
 $bonemerge "mod_scope"
 $bonemerge "mod_scope_lens"
