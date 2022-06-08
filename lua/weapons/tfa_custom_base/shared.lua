@@ -29,7 +29,7 @@ function DrawSingleReticle()
 	return nil
 end
 
-----[[ADS RELOAD IMPROVEMENT]]---- 
+----[[ADS RELOAD FOV FIX]]---- 
 
 local function l_Lerp(v, f, t)
 	return f + (t - f) * v
@@ -85,6 +85,18 @@ hook.Add("CalcViewModelView", "TFA_Debug_FreeVM", function(w, v, op, oa, p, a)
 		a:Set(fa)
 	end
 end)
+
+----[[C_MENU SOUNDS]]----
+
+if CLIENT then
+	function SWEP:OnCustomizationOpen()
+		self:EmitSound("TFA_GROVEZ.SHARED.MENU_ENTER")
+	end
+
+	function SWEP:OnCustomizationClose()
+		self:EmitSound("TFA_GROVEZ.SHARED.MENU_EXIT")
+	end
+end
 
 ----[[THINK]]----
 

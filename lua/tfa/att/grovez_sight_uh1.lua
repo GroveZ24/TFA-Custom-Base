@@ -28,6 +28,9 @@ ATTACHMENT.WeaponTable = {
 	["Reticle"] = "models/weapons/tfa_grovez/mods/scopes/uh1/reticle"
 }
 
+ATTACHMENT.AttachSound = "TFA_GROVEZ.SHARED.MENU_MOD_SELECT"
+ATTACHMENT.DetachSound = "TFA_GROVEZ.SHARED.MENU_MOD_DESELECT"
+
 if not TFA_ATTACHMENT_ISUPDATING then
 	TFAUpdateAttachments()
 end
