@@ -1,8 +1,8 @@
 "VertexLitGeneric"
 {
-	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\uh1\scope_d"
-	"$bumpmap"					"models\weapons\tfa_grovez\mods\scopes\uh1\scope_n"
-	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\scopes\uh1\scope_e"
+	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\uh1_gen2\UH1_D"
+	"$bumpmap"					"models\weapons\tfa_grovez\mods\scopes\uh1_gen2\UH1_N"
+	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\scopes\uh1_gen2\UH1_E"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
 	"$color2"					"[0.5 0.5 0.5]"
 	"$blendTintByBaseAlpha"		"1"

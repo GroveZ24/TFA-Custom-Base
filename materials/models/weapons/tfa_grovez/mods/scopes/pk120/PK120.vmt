@@ -1,13 +1,13 @@
 "VertexlitGeneric"
 {
-	$basetexture				"models\weapons\tfa_grovez\mods\scopes\pk120\scope_d"
-	$bumpmap					"models\weapons\tfa_grovez\mods\scopes\pk120\scope_n"
-	$phongexponenttexture		"models\weapons\tfa_grovez\mods\scopes\pk120\scope_e"
+	$basetexture				"models\weapons\tfa_grovez\mods\scopes\pk120\PK120_D"
+	$bumpmap					"models\weapons\tfa_grovez\mods\scopes\pk120\PK120_N"
+	$phongexponenttexture		"models\weapons\tfa_grovez\mods\scopes\pk120\PK120_E"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
 	"$color2"					"[0.5 0.5 0.5]"
 	"$blendTintByBaseAlpha"		"1"
 
-	$detail						"models\weapons\tfa_grovez\mods\scopes\pk120\scope_si"
+	$detail						"models\weapons\tfa_grovez\mods\scopes\pk120\PK120_SI"
 	$detailscale				1
 	$detailblendfactor			1
 	$detailblendmode			5

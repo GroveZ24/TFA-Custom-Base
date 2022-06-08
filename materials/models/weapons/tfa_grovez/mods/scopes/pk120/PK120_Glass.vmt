@@ -1,6 +1,6 @@
-"VertexLitGeneric"
+"VertexlitGeneric"
 {
-	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\uh1\glass_d"
+	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\pk120\PK120_Glass_D"
 	"$bumpmap"					"dev\bump_normal"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
 //	"$color2"					"[0.5 0.5 0.5]"
@@ -21,8 +21,8 @@
 		"TFA_INS2_IronsightVectorResult"
 		{
 			"resultVar"			"$envmaptint"
-			"ResultDefault"		"0.3 0.3 0.3"
-			"ResultZoomed"		"0.15 0.15 0.15"
+			"ResultDefault"		"50 50 50"
+			"ResultZoomed"		"25 25 25"
 
 		}
 	}

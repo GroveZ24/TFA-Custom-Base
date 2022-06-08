@@ -16,7 +16,7 @@ function DrawSingleReticle()
 			local reticle = wep:GetStat("Reticle", {})
 			if not reticle then return end
 
-			local activeelem = wep:GetStat("SightVElement")
+			local activeelem = wep:GetStat("ScopeVElement")
 			if not activeelem then return end
 
 			local result = reticle

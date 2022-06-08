@@ -10,10 +10,10 @@ ATTACHMENT.Description = {}
 ATTACHMENT.WeaponTable = {
 	["VElements"] = {
 		["scope_pk120"] = {
-			["active"] = true,
+			["active"] = true
 		},
 		["scope_pk120_lens"] = {
-			["active"] = true,
+			["active"] = true
 		},
 	},
 	["IronSightsPos"] = function(wep, val)
@@ -24,8 +24,8 @@ ATTACHMENT.WeaponTable = {
 			return val * 0.95
 		end
 	},
-	["SightVElement"] = "scope_pk120",
-	["Reticle"] = "models/weapons/tfa_grovez/mods/scopes/pk120/reticle"
+	["ScopeVElement"] = "scope_pk120",
+	["Reticle"] = "models/weapons/tfa_grovez/mods/scopes/pk120/PK120_Reticle"
 }
 
 ATTACHMENT.AttachSound = "TFA_GROVEZ.SHARED.MENU_MOD_SELECT"
