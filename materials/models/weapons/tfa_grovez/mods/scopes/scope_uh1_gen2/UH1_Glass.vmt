@@ -1,0 +1,31 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\scope_uh1_gen2\UH1_Glass_D"
+	"$bumpmap"					"dev\bump_normal"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
+//	"$color2"					"[0.5 0.5 0.5]"
+	"$translucent"				"1"
+
+	"$envmap"					"env_cubemap"
+	"$envmapfresnel"			"0.25"
+	"$envmaptint"				"[0.1 0.1 0.1]"
+//	"$normalmapalphaenvmapmask"	"1"
+
+	"$phong"					"1"
+	"$phongexponent"			"900"
+	"$phongboost"				"1"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	
+	"Proxies"
+	{
+		"TFA_INS2_IronsightVectorResult"
+		{
+			"resultVar"			"$envmaptint"
+			"ResultDefault"		"0.3 0.3 0.3"
+			"ResultZoomed"		"0.15 0.15 0.15"
+
+		}
+	}
+}
+//Material setup by ShadowRUN 幸運な. 
+//You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.

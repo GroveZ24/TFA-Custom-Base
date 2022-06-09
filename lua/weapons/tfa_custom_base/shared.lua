@@ -1,5 +1,9 @@
 DEFINE_BASECLASS("tfa_gun_base")
 
+----[[CUSTOM STATS]]----
+
+SWEP.HasFlashlight = false
+
 ----[[REMOVE SPRINT BOB COMPLETELY]]----
 
 function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
@@ -98,6 +102,18 @@ if CLIENT then
 	end
 end
 
+----[[FLASHLIGHT STUFF]]----
+
+hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabled)
+	return ply:GetActiveWeapon().HasFlashlight
+end)
+
+----[[STAT CACHE BLACKLIST]]----
+
+SWEP.StatCache_Blacklist = {
+	--Used for dynamic stats, empty for now
+}
+
 ----[[THINK]]----
 
 function SWEP:Think(...)
@@ -106,6 +122,14 @@ function SWEP:Think(...)
 	end
 
 	return BaseClass.Think(self, ...)
-end 
+end
+
+----[[THINK2: ELECTRIC BOOGALOO]]----
+
+function SWEP:Think2(...)
+	--Used for dynamic stats, empty for now
+	
+	return BaseClass.Think2(self, ...)
+end
 
 --https://sun9-85.userapi.com/s/v1/ig2/n_WKNsnSh8wVwBFfDfMJrV6wOM1jj2VRLFWnQ_2YkHz2F2bZYe7rqE9aiY8lr56wV7sf0EmzV2I8SE8Nl8bKAbfc.jpg?size=800x450&quality=96&type=album

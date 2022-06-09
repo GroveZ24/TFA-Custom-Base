@@ -13,6 +13,8 @@ TFA.AddSound(pref..".DRYFIRE_RIFLE", CHAN_AUTO, 1, 75, {99, 101}, path.."dryfire
 TFA.AddSound(pref..".DRYFIRE_SHOTGUN", CHAN_AUTO, 1, 75, {99, 101}, path.."dryfire/dryfire_shotgun.wav", ")")
 TFA.AddSound(pref..".DRYFIRE_SMG", CHAN_AUTO, 1, 75, {99, 101}, path.."dryfire/dryfire_smg.wav", ")")
 
+TFA.AddSound(pref..".FLASHLIGHT", CHAN_AUTO, 1, 100, 100, {path.."flashlight/flashlight_toggle_01.wav", path.."flashlight/flashlight_toggle_02.wav", path.."flashlight/flashlight_toggle_03.wav"}, ")")
+
 TFA.AddSound(pref..".MENU_ENTER", CHAN_AUTO, 1, 100, 100, path.."menu/menu_enter.wav", ")")
 TFA.AddSound(pref..".MENU_EXIT", CHAN_AUTO, 1, 100, 100, path.."menu/menu_exit.wav", ")")
 TFA.AddSound(pref..".MENU_ERROR", CHAN_AUTO, 1, 100, 100, path.."menu/menu_error.wav", ")")
