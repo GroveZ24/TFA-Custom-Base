@@ -26,7 +26,7 @@ local pist_rate = 3 * rateScaleFac
 local pist_scale = 9
 local rate_clamp = 2 * rateScaleFac
 local walkIntensitySmooth, breathIntensitySmooth = 0, 0
-local walkRate = 140 / 60 * TAU / 1.085 / 2 * rateScaleFac
+local walkRate = 150 / 60 * TAU / 1.085 / 2 * rateScaleFac
 local walkVec = Vector()
 local ownerVelocity, ownerVelocityMod = Vector(), Vector()
 local zVelocity, zVelocitySmooth = 0, 0
@@ -114,11 +114,11 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	pos:Add(upLocal * math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.2)
 	pos:Add(fwLocal * math.cos(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.25)
 	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 1.25)
-	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * -2)
-	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 2.5)
+	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * -0.75)
+	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 3)
 
     ----[[WALKING]]---- (Done!)
-    self2.walkTI = (self2.walkTI or 0) + delta * 140 / 60 * self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed()
+    self2.walkTI = (self2.walkTI or 0) + delta * 150 / 60 * self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed()
 	WalkPos.x = l_Lerp(delta * 5 * rateScaleFac, WalkPos.x, -math.sin(self2.ti * walkRate * 0.5) * gunbob_intensity * walkIntensity * 0.6)
 	WalkPos.y = l_Lerp(delta * 5 * rateScaleFac, WalkPos.y, math.sin(self2.ti * walkRate) / 1.5 * gunbob_intensity * walkIntensity * 0.3)
 	WalkPosLagged.x = l_Lerp(delta * 5 * rateScaleFac, WalkPosLagged.x, -math.sin((self2.ti * walkRate * 0.5) + math.pi / 3) * gunbob_intensity * walkIntensity * 0.6)
