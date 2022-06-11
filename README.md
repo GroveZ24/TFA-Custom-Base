@@ -7,7 +7,7 @@ Custom TFA Sub-base with new features and attachments
 
 ### Current features list:
 - Correct, layered ads reload
-- Sprint gun bob was removed completely
+- Custom gun bobbing and other procedurals
 - Simplified holosights creation
 - Free View Model (`cl_tfa_debug_freevm 1` to toggle free view model transform)
 
