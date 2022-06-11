@@ -4,12 +4,6 @@ DEFINE_BASECLASS("tfa_gun_base")
 
 SWEP.HasFlashlight = false
 
-----[[REMOVE SPRINT BOB COMPLETELY]]----
-
-function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
-	return pos, ang
-end
-
 ----[[DRAW SINGLE RETICLE]]----
 
 function DrawSingleReticle()
