@@ -139,12 +139,12 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 
     ----[[JUMPING]]----
 	local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
-    local jumpIntensity = (2.5 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.33)
-	pos:Add(ri * math.abs(math.sin(trigX)) * scale_r * 0.1 * jumpIntensity * -0.25)
-    pos:Add(-up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * 0.3)
-	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * -3)
-	ang:RotateAroundAxis(fw, math.sin(trigX) * scale_r * jumpIntensity * flip_v * 0.1)
+	local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.5)
 
+    pos:Add(up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * -0.5)
+	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * -1.75)
+	--https://sun9-59.userapi.com/s/v1/ig2/Y6jjUCuI43UDwEUAdIJ2IOpbFrcXzm5xAm4BZLYFxCPUa8-3aDmOmApOHDTmsSsqDBmeFw4JYp4Wwdy9rAcPox-E.jpg?size=1020x1293&quality=96&type=album
+	
     ----[[ROLLING WITH HORIZONTAL MOTION]]----
     local xVelocityClamped = xVelocitySmooth
 
