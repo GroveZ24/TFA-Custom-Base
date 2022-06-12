@@ -19,4 +19,11 @@ Custom TFA Sub-base with new features and attachments
 - Hybrid sights
 - And more
 
+### Credits:
+- Models: ParallaxGameStudios, ohdeer, aTacticalError, Battlestate Games
+- Materials: ShadowRUN
+- Particles: FAS2 Team, AyyKyu
+- Sounds: Infinity Ward, Massive Entertainment, Navaro, Battlestate Games
+- lua, rigging, compile: Me
+
 This base will be constantly updated in the future, features list is not final
