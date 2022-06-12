@@ -102,22 +102,22 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
     local breatheMult2 = math.Clamp(self2.IronSightsProgressUnpredicted2 or self:GetIronSightsProgress(), 0, 1)
 	local breatheMult1 = (1 - breatheMult2) - (self:GetInspectingProgress() * 0.75)
 
-	----[[BREATHING]]---- (Done!)
+	----[[BREATHING]]----
 	pos:Add(riLocal * (math.sin(self2.ti * walkRate * 0.5) - math.cos(self2.ti * walkRate)) * flip_v * breathIntensity * breatheMult1 * 0.1)
 	pos:Add(upLocal * math.sin(self2.ti * walkRate * 1) * breathIntensity * breatheMult1 * 0.2)
 	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate * 1) * breathIntensity * breatheMult1 * 2)
 	ang:RotateAroundAxis(up, (math.sin(self2.ti * walkRate * 0.5) - math.cos(self2.ti * walkRate)) * breathIntensity * breatheMult1 * 0.3)
 	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate * 0.5) * breathIntensity * breatheMult1 * 2)
 
-	----[[ADS WALKING]]---- (Done!)
-	pos:Add(riLocal * math.cos(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 0.35)
-	pos:Add(fwLocal * math.cos(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.2)
-	pos:Add(upLocal * math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.15)
-	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.9)
-	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * -0.7)
-	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 4)
+	----[[ADS WALKING]]----
+	pos:Add(riLocal * math.cos(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 0.15)
+	pos:Add(fwLocal * math.cos(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.2)
+	pos:Add(upLocal * math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.15)
+	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.75)
+	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * -1.5)
+	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 2)
 
-    ----[[WALKING]]---- (Done!)
+    ----[[WALKING]]----
     self2.walkTI = (self2.walkTI or 0) + delta * 150 / 60 * self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed()
 	WalkPos.x = l_Lerp(delta * 5 * rateScaleFac, WalkPos.x, -math.sin(self2.ti * walkRate * 0.5) * gunbob_intensity * walkIntensity * 0.45)
 	WalkPos.y = l_Lerp(delta * 5 * rateScaleFac, WalkPos.y, math.sin(self2.ti * walkRate) / 1.5 * gunbob_intensity * walkIntensity * 0.2)
@@ -129,7 +129,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	ang:RotateAroundAxis(up, WalkPos.x * 3)
 	ang:RotateAroundAxis(fw, WalkPos.y * 7.5)
 
-    ----[[CONSTANT OFFSET]]---- (Done!)
+    ----[[CONSTANT OFFSET]]----
     pos:Add(riLocal * walkVec.x * flip_v)
     pos:Add(fwLocal * walkVec.y)
     pos:Add(upLocal * walkVec.z)
@@ -137,14 +137,15 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	ang:RotateAroundAxis(up, walkAng.y)
 	ang:RotateAroundAxis(fw, walkAng.z)
 
-    ----[[JUMPING]]---- (TBA. But honestly, fuck this shit)
-    local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
-    local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.8)
-    pos:Add(ri * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * 0.4)
-    pos:Add(-up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * 0.4)
-    ang:RotateAroundAxis(ang:Forward(), math.sin(trigX) * scale_r * jumpIntensity * flip_v * 0.4)
+    ----[[JUMPING]]----
+	local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
+    local jumpIntensity = (2.5 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.33)
+	pos:Add(ri * math.abs(math.sin(trigX)) * scale_r * 0.1 * jumpIntensity * -0.25)
+    pos:Add(-up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * 0.3)
+	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * -3)
+	ang:RotateAroundAxis(fw, math.sin(trigX) * scale_r * jumpIntensity * flip_v * 0.1)
 
-    ----[[ROLLING WITH HORIZONTAL MOTION]]---- (Done!)
+    ----[[ROLLING WITH HORIZONTAL MOTION]]----
     local xVelocityClamped = xVelocitySmooth
 
     if math.abs(xVelocityClamped) > 200 then
