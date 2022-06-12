@@ -157,7 +157,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
     pos:Add(upLocal * math.abs(xVelocityClamped) * -0.001 * 0.7)
 	ang:RotateAroundAxis(ri, math.abs(xVelocityClamped) * 0.0025 * 0.7)
 	ang:RotateAroundAxis(up, xVelocityClamped * 0.005 * 0.7)
-    ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 0.7)
+    ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 1.5)
 
     return pos, ang
 end
