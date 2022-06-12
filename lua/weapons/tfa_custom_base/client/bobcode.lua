@@ -137,14 +137,14 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	ang:RotateAroundAxis(up, walkAng.y)
 	ang:RotateAroundAxis(fw, walkAng.z)
 
-    ----[[JUMPING]]---- (TBA)
+    ----[[JUMPING]]---- (TBA. But honestly, fuck this shit)
     local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
     local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.8)
     pos:Add(ri * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * 0.4)
     pos:Add(-up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * 0.4)
     ang:RotateAroundAxis(ang:Forward(), math.sin(trigX) * scale_r * jumpIntensity * flip_v * 0.4)
 
-    ----[[ROLLING WITH HORIZONTAL MOTION]]---- (In progress)
+    ----[[ROLLING WITH HORIZONTAL MOTION]]---- (Done!)
     local xVelocityClamped = xVelocitySmooth
 
     if math.abs(xVelocityClamped) > 200 then
@@ -152,7 +152,12 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
         xVelocityClamped = (math.sqrt((math.abs(xVelocityClamped) - 200) / 50) * 50 + 200) * sign
     end
 
-    ang:RotateAroundAxis(ang:Forward(), xVelocityClamped * 0.04 * flip_v)
+	pos:Add(riLocal * xVelocityClamped * 0.001 * flip_v * 0.7)
+	pos:Add(fwLocal * math.abs(xVelocityClamped) * -0.0025 * 0.7)
+    pos:Add(upLocal * math.abs(xVelocityClamped) * -0.001 * 0.7)
+	ang:RotateAroundAxis(ri, math.abs(xVelocityClamped) * 0.0025 * 0.7)
+	ang:RotateAroundAxis(up, xVelocityClamped * 0.005 * 0.7)
+    ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 0.7)
 
     return pos, ang
 end
