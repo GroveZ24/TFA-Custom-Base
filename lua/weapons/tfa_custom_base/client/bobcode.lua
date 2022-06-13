@@ -52,6 +52,8 @@ local function l_Lerp(t, a, b)
 	return a + (b - a) * t
 end
 
+--https://sun9-81.userapi.com/s/v1/ig2/7_7w-23Ry1-cHhz4P8mAO4fwlJNqtUozzoC5HW2skQ_6EtCzaVSzrH-2eDFk_GyLhbrvOF2zRWaw-KxphPJ_P_6Q.jpg?size=604x544&quality=95&type=album
+
 function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local self2 = self:GetTable()
 	if not self2.OwnerIsValid(self) then return end
