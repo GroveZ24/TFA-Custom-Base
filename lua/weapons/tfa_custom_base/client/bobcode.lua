@@ -61,6 +61,12 @@ local LandingFractionPosUp = 0
 local LandingFractionAngRi = 0
 local LandingFractionAngUp = 0
 local LandingFractionAngFw = 0
+local LandingFractionPosRiLerp = 0
+local LandingFractionPosFwLerp = 0
+local LandingFractionPosUpLerp = 0
+local LandingFractionAngRiLerp = 0
+local LandingFractionAngUpLerp = 0
+local LandingFractionAngFwLerp = 0
 
 local HasJumped = false
 local JumpingFractionPosRi = 0
@@ -69,6 +75,12 @@ local JumpingFractionPosUp = 0
 local JumpingFractionAngRi = 0
 local JumpingFractionAngUp = 0
 local JumpingFractionAngFw = 0
+local JumpingFractionPosRiLerp = 0
+local JumpingFractionPosFwLerp = 0
+local JumpingFractionPosUpLerp = 0
+local JumpingFractionAngRiLerp = 0
+local JumpingFractionAngUpLerp = 0
+local JumpingFractionAngFwLerp = 0
 
 function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local self2 = self:GetTable()
@@ -166,18 +178,14 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	end
 
 	local function InOutBackEasedLerp(fraction, from, to)
-		return LerpUnclamped(math.ease.InOutBack(fraction), from, to)
+		return LerpUnclamped(math.ease.InBack(fraction), from, to)
 	end
 	
 	local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
 	local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
-	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
+	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.5)
 	local JumpCustMul = (1 - self:GetInspectingProgress() * 0.75)
-
-	pos:Add(up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * JumpCustMul * -0.25)
-	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * JumpCustMul * -0.75)
-	
-	--Literally how I code this shit (2 days well spent btw): https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
+	local AnimSmoothing = 15
 
 	----[[LANDING]]----
 
@@ -212,12 +220,19 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local LandingAngUp = InElasticEasedLerp(LandingFractionAngUp, 0, 2)
 	local LandingAngFw = InElasticEasedLerp(LandingFractionAngFw, 0, 2)
 
-	pos:Add(ri * LandingPosRi * JumpADSMul * JumpCustMul * 0)
-	pos:Add(fw * LandingPosFw * JumpADSMul * JumpCustMul * 0)
-	pos:Add(up * LandingPosUp * JumpADSMul * JumpCustMul * -0.25)
-	ang:RotateAroundAxis(ri, LandingAngRi * JumpADSMul * JumpCustMul * -3.5)
-	ang:RotateAroundAxis(up, LandingAngUp * JumpADSMul * JumpCustMul * 0)
-	ang:RotateAroundAxis(fw, LandingAngFw * JumpADSMul * JumpCustMul * 0.75)
+	LandingFractionPosRiLerp = Lerp(delta * AnimSmoothing, LandingFractionPosRiLerp, LandingAngUp * JumpADSMul * 0)
+	LandingFractionPosFwLerp = Lerp(delta * AnimSmoothing, LandingFractionPosFwLerp, LandingAngUp * JumpADSMul * 0)
+	LandingFractionPosUpLerp = Lerp(delta * AnimSmoothing, LandingFractionPosUpLerp, LandingPosUp * JumpADSMul * -0.5)
+	LandingFractionAngRiLerp = Lerp(delta * AnimSmoothing, LandingFractionAngRiLerp, LandingAngRi * JumpADSMul * -4)
+	LandingFractionAngUpLerp = Lerp(delta * AnimSmoothing, LandingFractionAngUpLerp, LandingAngUp * JumpADSMul * 0)
+	LandingFractionAngFwLerp = Lerp(delta * AnimSmoothing, LandingFractionAngFwLerp, LandingAngFw * JumpADSMul * 2)
+
+	pos:Add(ri * LandingFractionPosRiLerp)
+	pos:Add(fw * LandingFractionPosFwLerp)
+	pos:Add(up * LandingFractionPosUpLerp)
+	ang:RotateAroundAxis(ri, LandingFractionAngRiLerp)
+	ang:RotateAroundAxis(up, LandingFractionAngUpLerp)
+	ang:RotateAroundAxis(fw, LandingFractionAngFwLerp)
 
 	----[[JUMPING]]----
 
@@ -228,7 +243,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 			HasJumped = false
 		end)
 	end)
-	
+
 	if HasJumped then
 		JumpingFractionPosRi = 1
 		JumpingFractionPosFw = 1
@@ -237,13 +252,13 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 		JumpingFractionAngUp = 1
 		JumpingFractionAngFw = 1
 	end
-	
+
 	JumpingFractionPosRi = math.Approach(JumpingFractionPosRi, 0, delta * 0)
-	JumpingFractionPosFw = math.Approach(JumpingFractionPosFw, 0, delta * 0.25)
-	JumpingFractionPosUp = math.Approach(JumpingFractionPosUp, 0, delta * 0.5)
-	JumpingFractionAngRi = math.Approach(JumpingFractionAngRi, 0, delta * 0.25)
-	JumpingFractionAngUp = math.Approach(JumpingFractionAngUp, 0, delta * 0.5)
-	JumpingFractionAngFw = math.Approach(JumpingFractionAngFw, 0, delta * 1)
+	JumpingFractionPosFw = math.Approach(JumpingFractionPosFw, 0, delta * 0)
+	JumpingFractionPosUp = math.Approach(JumpingFractionPosUp, 0, delta * 0.75)
+	JumpingFractionAngRi = math.Approach(JumpingFractionAngRi, 0, delta * 0.5)
+	JumpingFractionAngUp = math.Approach(JumpingFractionAngUp, 0, delta * 0)
+	JumpingFractionAngFw = math.Approach(JumpingFractionAngFw, 0, delta * 2)
 
 	local JumpingPosRi = InElasticEasedLerp(JumpingFractionPosRi, 0, 2)
 	local JumpingPosFw = InElasticEasedLerp(JumpingFractionPosFw, 0, 2)
@@ -252,13 +267,22 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local JumpingAngUp = InElasticEasedLerp(JumpingFractionAngUp, 0, 2)
 	local JumpingAngFw = InElasticEasedLerp(JumpingFractionAngFw, 0, 2)
 
-	pos:Add(ri * JumpingPosRi * JumpADSMul * JumpCustMul * 0)
-	pos:Add(fw * JumpingPosFw * JumpADSMul * JumpCustMul * 0.25)
-	pos:Add(up * JumpingPosUp * JumpADSMul * JumpCustMul * 0.75)
-	ang:RotateAroundAxis(ri, JumpingAngRi * JumpADSMul * JumpCustMul * -4)
-	ang:RotateAroundAxis(up, JumpingAngUp * JumpADSMul * JumpCustMul * 0.75)
-	ang:RotateAroundAxis(fw, JumpingAngFw * JumpADSMul * JumpCustMul * 3)	
+	JumpingFractionPosRiLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosRiLerp, JumpingPosRi * JumpADSMul * 0)
+	JumpingFractionPosFwLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosFwLerp, JumpingPosRi * JumpADSMul * 0)
+	JumpingFractionPosUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosUpLerp, JumpingPosUp * JumpADSMul * -0.75)
+	JumpingFractionAngRiLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngRiLerp, JumpingAngRi * JumpADSMul * -5)
+	JumpingFractionAngUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngUpLerp, JumpingPosRi * JumpADSMul * 0)
+	JumpingFractionAngFwLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngFwLerp, JumpingAngFw * JumpADSMul * 1)
 
+	pos:Add(ri * JumpingFractionPosRiLerp)
+	pos:Add(fw * JumpingFractionPosFwLerp)
+	pos:Add(up * JumpingFractionPosUpLerp)
+	ang:RotateAroundAxis(ri, JumpingFractionAngRiLerp)
+	ang:RotateAroundAxis(up, JumpingFractionAngUpLerp)
+	ang:RotateAroundAxis(fw, JumpingFractionAngFwLerp)	
+	
+	--Literally how I code this shit instead of sleeping (2 days well spent): https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
+	
 	----[[ROLLING WITH HORIZONTAL MOTION]]----
 	local xVelocityClamped = xVelocitySmooth
 
