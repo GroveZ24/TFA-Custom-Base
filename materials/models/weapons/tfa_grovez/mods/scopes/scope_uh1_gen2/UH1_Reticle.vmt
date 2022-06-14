@@ -1,22 +1,23 @@
 "UnlitGeneric"
 {
-	"$basetexture"				"models/weapons/tfa_grovez/mods/scopes/scope_uh1_gen2/UH1_Reticle"
-	"$detail"					"models/weapons/tfa_ins2/optics/laser_noise"
-	"$detailblendmode"			"2"
-	"$detailframe"				"0"
-	"$translucent"				"1"
-	"$model"					"1"
-	"$additive"					"1"
+	"$basetexture"					"models\weapons\tfa_grovez\mods\scopes\scope_uh1_gen2\UH1_Reticle"
+	"$detail"						"models\weapons\tfa_grovez\laser_noise"
+	"$detailscale"					"0.5"
+	"$detailblendfactor"			"1"
+	"$detailblendmode"				"5"
+	"$detailframe"					"0"
+	"$translucent"					"1"
+	"$additive"						"1"
 
-	"$color2"					"[0 0 0]"
+	"$color2"						"[0 0 0]"
 
 	Proxies
 	{
 		TextureScroll
 		{
 			textureScrollVar		$detailtexturetransform
-			textureScrollRate		50
-			textureScrollAngle		180
+			textureScrollRate		100
+			textureScrollAngle		45
 		}
 		TFAReticuleColor
 		{
