@@ -510,7 +510,7 @@ function SWEP:Sway(pos, ang, ftv)
 		oldEyeAngles = oldEyeAngles or eyeAngles
 
 		wiggleFactor = (1 - (sv_tfa_weapon_weight:GetBool() and self2.GetStatL(self, "RegularMoveSpeedMultiplier") or 1)) / 0.6 + 0.15
-		swayRate = math.pow(sv_tfa_weapon_weight:GetBool() and self2.GetStatL(self, "RegularMoveSpeedMultiplier") or 1, 1.5) * 10
+		swayRate = math.pow(sv_tfa_weapon_weight:GetBool() and self2.GetStatL(self, "RegularMoveSpeedMultiplier") or 1, 1.5) * 8.5 -- 10
 		rft = math.Clamp(ftv, 0.001, 1 / 20)
 		local clampFac = 1.1 - math.min((math.abs(motion.p) + math.abs(motion.y) + math.abs(motion.r)) / 20, 1)
 		delta.p = math.AngleDifference(eyeAngles.p, oldEyeAngles.p) / rft / 120 * clampFac
@@ -524,10 +524,8 @@ function SWEP:Sway(pos, ang, ftv)
 		motion = LerpAngle(rft * swayRate, motion, delta + compensation)
 	end
 
-	positionCompensation = 0.2 + 0.2 * ((self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) or 0)
-
 	local SwayMul = 0.75 * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.4)
-	local SwaySmoothing = 50
+	local SwaySmoothing = 25
 
 	SwayLerpY = Lerp(FrameTime() * SwaySmoothing, SwayLerpY, motion.y)
 	SwayLerpP = Lerp(FrameTime() * SwaySmoothing, SwayLerpP, motion.p)
