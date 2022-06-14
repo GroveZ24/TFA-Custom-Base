@@ -177,15 +177,8 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 		return LerpUnclamped(math.ease.InElastic(fraction), from, to)
 	end
 
-	local function InOutBackEasedLerp(fraction, from, to)
-		return LerpUnclamped(math.ease.InBack(fraction), from, to)
-	end
-	
-	local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
-	local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
-	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.5)
-	local JumpCustMul = (1 - self:GetInspectingProgress() * 0.75)
-	local AnimSmoothing = 15
+	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.25)
+	local AnimSmoothing = 20
 
 	----[[LANDING]]----
 
