@@ -52,7 +52,7 @@ local function l_Lerp(t, a, b)
 	return a + (b - a) * t
 end
 
---https://sun9-81.userapi.com/s/v1/ig2/7_7w-23Ry1-cHhz4P8mAO4fwlJNqtUozzoC5HW2skQ_6EtCzaVSzrH-2eDFk_GyLhbrvOF2zRWaw-KxphPJ_P_6Q.jpg?size=604x544&quality=95&type=album
+--I HATE PROCEDURALS I HATE PROCEDURALS: https://sun9-81.userapi.com/s/v1/ig2/7_7w-23Ry1-cHhz4P8mAO4fwlJNqtUozzoC5HW2skQ_6EtCzaVSzrH-2eDFk_GyLhbrvOF2zRWaw-KxphPJ_P_6Q.jpg?size=604x544&quality=95&type=album
 
 local HasLanded = false
 local LandingFractionPosRi = 0
@@ -177,7 +177,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	pos:Add(up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * JumpCustMul * -0.25)
 	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * JumpCustMul * -0.75)
 	
-	--https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
+	--Literally how I code this shit (2 days well spent btw): https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
 
 	----[[LANDING]]----
 
@@ -315,7 +315,7 @@ function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
 		end
 	end
 	
-	--https://sun9-42.userapi.com/s/v1/ig2/yeRHvGmVTE71Ppjd4wplC6BWkBFL48ydFdy-Whh4ZJrDe3FYHoWms9gXcghuIll6SiCebW6f2zo9tpZFWhl408a8.jpg?size=486x1024&quality=96&type=album
+	--I dunno why I put it there: https://sun9-42.userapi.com/s/v1/ig2/yeRHvGmVTE71Ppjd4wplC6BWkBFL48ydFdy-Whh4ZJrDe3FYHoWms9gXcghuIll6SiCebW6f2zo9tpZFWhl408a8.jpg?size=486x1024&quality=96&type=album
 
 	return pos, ang
 end
