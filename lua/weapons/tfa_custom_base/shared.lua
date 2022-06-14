@@ -102,6 +102,27 @@ hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabl
 	return ply:GetActiveWeapon().HasFlashlight
 end)
 
+----[[JUMP ANIMS STUFF]]----
+
+if SERVER then
+	util.AddNetworkString("TFA_HasLanded")
+	util.AddNetworkString("TFA_HasJumped")
+
+	hook.Add("OnPlayerHitGround", "TFA_Landing_Anim", function(ply, inWater, onFloater, speed)
+		net.Start("TFA_HasLanded")
+		net.Send(ply)
+	end)
+	
+	hook.Add("PlayerTick", "TFA_Jumping_Anim", function(ply)
+		if IsValid(ply) and ply:Alive() then 
+			if ply:KeyPressed(IN_JUMP) and ply:OnGround() then
+				net.Start("TFA_HasJumped")
+				net.Send(ply)
+			end
+		end
+	end)
+end
+
 ----[[STAT CACHE BLACKLIST]]----
 
 SWEP.StatCache_Blacklist = {

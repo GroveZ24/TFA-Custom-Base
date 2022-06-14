@@ -54,6 +54,22 @@ end
 
 --https://sun9-81.userapi.com/s/v1/ig2/7_7w-23Ry1-cHhz4P8mAO4fwlJNqtUozzoC5HW2skQ_6EtCzaVSzrH-2eDFk_GyLhbrvOF2zRWaw-KxphPJ_P_6Q.jpg?size=604x544&quality=95&type=album
 
+local HasLanded = false
+local LandingFractionPosRi = 0
+local LandingFractionPosFw = 0
+local LandingFractionPosUp = 0
+local LandingFractionAngRi = 0
+local LandingFractionAngUp = 0
+local LandingFractionAngFw = 0
+
+local HasJumped = false
+local JumpingFractionPosRi = 0
+local JumpingFractionPosFw = 0
+local JumpingFractionPosUp = 0
+local JumpingFractionAngRi = 0
+local JumpingFractionAngUp = 0
+local JumpingFractionAngFw = 0
+
 function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local self2 = self:GetTable()
 	if not self2.OwnerIsValid(self) then return end
@@ -139,13 +155,109 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	ang:RotateAroundAxis(up, walkAng.y)
 	ang:RotateAroundAxis(fw, walkAng.z)
 
-	----[[JUMPING]]----
-	local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
-	local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.5)
+	----[[JUMPING + LANDING]]----
 
-	pos:Add(up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * -0.5)
-	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * -1.75)
-	--https://sun9-59.userapi.com/s/v1/ig2/Y6jjUCuI43UDwEUAdIJ2IOpbFrcXzm5xAm4BZLYFxCPUa8-3aDmOmApOHDTmsSsqDBmeFw4JYp4Wwdy9rAcPox-E.jpg?size=1020x1293&quality=96&type=album
+	local function LerpUnclamped(t, from, to)
+		return t + (from - t) * to
+	end
+
+	local function InElasticEasedLerp(fraction, from, to)
+		return LerpUnclamped(math.ease.InElastic(fraction), from, to)
+	end
+
+	local function InOutBackEasedLerp(fraction, from, to)
+		return LerpUnclamped(math.ease.InOutBack(fraction), from, to)
+	end
+	
+	local trigX = -math.Clamp(zVelocitySmooth / 200, -1, 1) * math.pi / 2
+	local jumpIntensity = (3 + math.Clamp(math.abs(zVelocitySmooth) - 100, 0, 200) / 200 * 4) * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
+	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
+	local JumpCustMul = (1 - self:GetInspectingProgress() * 0.75)
+
+	pos:Add(up * math.sin(trigX) * scale_r * 0.1 * jumpIntensity * JumpCustMul * -0.25)
+	ang:RotateAroundAxis(ri, math.sin(trigX) * scale_r * 0.1 * jumpIntensity * flip_v * JumpCustMul * -0.75)
+	
+	--https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
+
+	----[[LANDING]]----
+
+	net.Receive("TFA_HasLanded", function(len, ply)
+		HasLanded = true
+
+		timer.Simple(0.001, function()
+			HasLanded = false
+		end)
+	end)
+
+	if HasLanded then
+		LandingFractionPosRi = 1
+		LandingFractionPosFw = 1
+		LandingFractionPosUp = 1
+		LandingFractionAngRi = 1
+		LandingFractionAngUp = 1
+		LandingFractionAngFw = 1
+	end
+
+	LandingFractionPosRi = math.Approach(LandingFractionPosRi, 0, delta * 0)
+	LandingFractionPosFw = math.Approach(LandingFractionPosFw, 0, delta * 0)
+	LandingFractionPosUp = math.Approach(LandingFractionPosUp, 0, delta * 0.75)
+	LandingFractionAngRi = math.Approach(LandingFractionAngRi, 0, delta * 0.5)
+	LandingFractionAngUp = math.Approach(LandingFractionAngUp, 0, delta * 0)
+	LandingFractionAngFw = math.Approach(LandingFractionAngFw, 0, delta * 1.5)
+
+	local LandingPosRi = InElasticEasedLerp(LandingFractionPosRi, 0, 2)
+	local LandingPosFw = InElasticEasedLerp(LandingFractionPosFw, 0, 2)
+	local LandingPosUp = InElasticEasedLerp(LandingFractionPosUp, 0, 2)
+	local LandingAngRi = InElasticEasedLerp(LandingFractionAngRi, 0, 2)
+	local LandingAngUp = InElasticEasedLerp(LandingFractionAngUp, 0, 2)
+	local LandingAngFw = InElasticEasedLerp(LandingFractionAngFw, 0, 2)
+
+	pos:Add(ri * LandingPosRi * JumpADSMul * JumpCustMul * 0)
+	pos:Add(fw * LandingPosFw * JumpADSMul * JumpCustMul * 0)
+	pos:Add(up * LandingPosUp * JumpADSMul * JumpCustMul * -0.25)
+	ang:RotateAroundAxis(ri, LandingAngRi * JumpADSMul * JumpCustMul * -3.5)
+	ang:RotateAroundAxis(up, LandingAngUp * JumpADSMul * JumpCustMul * 0)
+	ang:RotateAroundAxis(fw, LandingAngFw * JumpADSMul * JumpCustMul * 0.75)
+
+	----[[JUMPING]]----
+
+	net.Receive("TFA_HasJumped", function(len, ply)
+		HasJumped = true
+
+		timer.Simple(0.001, function()
+			HasJumped = false
+		end)
+	end)
+	
+	if HasJumped then
+		JumpingFractionPosRi = 1
+		JumpingFractionPosFw = 1
+		JumpingFractionPosUp = 1
+		JumpingFractionAngRi = 1
+		JumpingFractionAngUp = 1
+		JumpingFractionAngFw = 1
+	end
+	
+	JumpingFractionPosRi = math.Approach(JumpingFractionPosRi, 0, delta * 0)
+	JumpingFractionPosFw = math.Approach(JumpingFractionPosFw, 0, delta * 0.25)
+	JumpingFractionPosUp = math.Approach(JumpingFractionPosUp, 0, delta * 0.5)
+	JumpingFractionAngRi = math.Approach(JumpingFractionAngRi, 0, delta * 0.25)
+	JumpingFractionAngUp = math.Approach(JumpingFractionAngUp, 0, delta * 0.5)
+	JumpingFractionAngFw = math.Approach(JumpingFractionAngFw, 0, delta * 1)
+
+	local JumpingPosRi = InElasticEasedLerp(JumpingFractionPosRi, 0, 2)
+	local JumpingPosFw = InElasticEasedLerp(JumpingFractionPosFw, 0, 2)
+	local JumpingPosUp = InElasticEasedLerp(JumpingFractionPosUp, 0, 2)
+	local JumpingAngRi = InElasticEasedLerp(JumpingFractionAngRi, 0, 2)
+	local JumpingAngUp = InElasticEasedLerp(JumpingFractionAngUp, 0, 2)
+	local JumpingAngFw = InElasticEasedLerp(JumpingFractionAngFw, 0, 2)
+
+	pos:Add(ri * JumpingPosRi * JumpADSMul * JumpCustMul * 0)
+	pos:Add(fw * JumpingPosFw * JumpADSMul * JumpCustMul * 0.25)
+	pos:Add(up * JumpingPosUp * JumpADSMul * JumpCustMul * 0.75)
+	ang:RotateAroundAxis(ri, JumpingAngRi * JumpADSMul * JumpCustMul * -4)
+	ang:RotateAroundAxis(up, JumpingAngUp * JumpADSMul * JumpCustMul * 0.75)
+	ang:RotateAroundAxis(fw, JumpingAngFw * JumpADSMul * JumpCustMul * 3)	
 
 	----[[ROLLING WITH HORIZONTAL MOTION]]----
 	local xVelocityClamped = xVelocitySmooth
@@ -202,6 +314,8 @@ function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
 			pos:Add(localUp * math.sin(self2.ti * rate_r) * scale_r * 0.1 * intensity * 0.33)
 		end
 	end
+	
+	--https://sun9-42.userapi.com/s/v1/ig2/yeRHvGmVTE71Ppjd4wplC6BWkBFL48ydFdy-Whh4ZJrDe3FYHoWms9gXcghuIll6SiCebW6f2zo9tpZFWhl408a8.jpg?size=486x1024&quality=96&type=album
 
 	return pos, ang
 end
