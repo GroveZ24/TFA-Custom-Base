@@ -522,11 +522,24 @@ function SWEP:Sway(pos, ang, ftv)
 	end
 
 	positionCompensation = 0.2 + 0.2 * ((self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) or 0)
-	pos:Add(-motion.y * positionCompensation * 0.66 * fac * ang:Right() * flipFactor) --compensate position for yaw
-	pos:Add(-motion.p * positionCompensation * fac * ang:Up()) --compensate position for pitch
-	ang:RotateAroundAxis(ang:Right(), motion.p * fac)
-	ang:RotateAroundAxis(ang:Up(), -motion.y * 0.66 * fac * flipFactor)
-	ang:RotateAroundAxis(ang:Forward(), counterMotion.r * 0.5 * fac * flipFactor)
+	local SwayMul = 0.75 * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.4)
+
+	pos:Add(ang:Right() * motion.y * SwayMul * 0.2)
+	pos:Add(ang:Up() * -motion.y * SwayMul * 0.1)
+	pos:Add(ang:Forward() * -math.abs(motion.y) * SwayMul * 0.1)
+	ang:RotateAroundAxis(ang:Right(), -math.abs(motion.y) * SwayMul * 0.25)
+	ang:RotateAroundAxis(ang:Up(), motion.y * SwayMul * 0.75)
+	ang:RotateAroundAxis(ang:Forward(), -motion.y * SwayMul * 2)
+
+	--pos:Add(ang:Right() * motion.p * (SwayMul * 1.5) * 0)
+	pos:Add(ang:Up() * motion.p * (SwayMul * 1.5) * 0.25)
+	--pos:Add(ang:Forward() * motion.p * (SwayMul * 1.5) * 0)
+	ang:RotateAroundAxis(ang:Right(), -motion.p * (SwayMul * 1.5) * 1.25)
+	--ang:RotateAroundAxis(ang:Up(), motion.p * (SwayMul * 1.5) * 0)
+	ang:RotateAroundAxis(ang:Forward(), motion.p * (SwayMul * 1.5) * 0.5)
+	
+	--https://cdn.discordapp.com/attachments/973478781207601222/986291551963594752/IMG_20220614_210314_HDR.jpg
+	--Yeah, this photo was taken by me
 
 	return pos, ang
 end
