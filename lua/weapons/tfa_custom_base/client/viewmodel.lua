@@ -439,29 +439,6 @@ function SWEP:CalculateViewModelOffset(delta)
 		target_ang = target_ang + bbvec * self2.BlowbackCurrentRoot
 	end
 
-	if not sv_tfa_recoil_legacy:GetBool() and cl_tfa_viewmodel_vp_enabled:GetBool() then
-	--[[
-		if self:HasRecoilLUT() then
-			if not ironSights then
-				local ang = self:GetRecoilLUTAngle()
-
-				target_ang.x = target_ang.x - ang.p / 2 * Lerp(ironSightsProgress, self:GetStatL("ViewModelPunchPitchMultiplier") * cl_tfa_viewmodel_vp_pitch:GetFloat(), self:GetStatL("ViewModelPunchPitchMultiplier_IronSights") * cl_tfa_viewmodel_vp_pitch_is:GetFloat())
-				target_ang.y = target_ang.y + ang.y / 2 * Lerp(ironSightsProgress, self:GetStatL("ViewModelPunchYawMultiplier") * cl_tfa_viewmodel_vp_yaw:GetFloat(), self:GetStatL("ViewModelPunchYawMultiplier_IronSights") * cl_tfa_viewmodel_vp_yaw_is:GetFloat())
-			end
-		else
-			target_ang.x = target_ang.x - self:GetViewPunchP() * Lerp(ironSightsProgress, self:GetStatL("ViewModelPunchPitchMultiplier") * cl_tfa_viewmodel_vp_pitch:GetFloat(), self:GetStatL("ViewModelPunchPitchMultiplier_IronSights") * cl_tfa_viewmodel_vp_pitch_is:GetFloat())
-			target_ang.y = target_ang.y + self:GetViewPunchY() * Lerp(ironSightsProgress, self:GetStatL("ViewModelPunchYawMultiplier") * cl_tfa_viewmodel_vp_yaw:GetFloat(), self:GetStatL("ViewModelPunchYawMultiplier_IronSights") * cl_tfa_viewmodel_vp_yaw_is:GetFloat())
-
-			local ViewModelPunch_MaxVertialOffset = Lerp(ironSightsProgress, self:GetStatL("ViewModelPunch_MaxVertialOffset") * cl_tfa_viewmodel_vp_max_vertical:GetFloat(), self:GetStatL("ViewModelPunch_MaxVertialOffset_IronSights") * cl_tfa_viewmodel_vp_max_vertical_is:GetFloat())
-
-			target_pos.y = target_pos.y + math.Clamp(
-				self:GetViewPunchP() * Lerp(ironSightsProgress, self:GetStatL("ViewModelPunch_VertialMultiplier") * cl_tfa_viewmodel_vp_vertical:GetFloat(), self:GetStatL("ViewModelPunch_VertialMultiplier_IronSights") * cl_tfa_viewmodel_vp_vertical_is:GetFloat()),
-				-ViewModelPunch_MaxVertialOffset,
-				ViewModelPunch_MaxVertialOffset)
-		end
-	--]]
-	end
-
 	if not cv_customgunbob:GetBool() then
 		self2.pos_cached, self2.ang_cached = Vector(target_pos), Angle(target_ang.x, target_ang.y, target_ang.z)
 
