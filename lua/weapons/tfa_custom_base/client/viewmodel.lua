@@ -473,11 +473,7 @@ function SWEP:CalculateViewModelOffset(delta)
 	local velocity = math.max(self:GetOwner():GetVelocity():Length2D() * self:AirWalkScale() - self:GetOwner():GetVelocity().z * 0.5, 0)
 	local rate = math.min(math.max(0.15, math.sqrt(velocity / self:GetOwner():GetRunSpeed()) * 1.75), self:GetSprinting() and 5 or 3)
 
-	self2.pos_cached, self2.ang_cached = self:WalkBob(
-		target_pos,
-		Angle(target_ang.x, target_ang.y, target_ang.z),
-		math.max(intensityBreath - intensityWalk - intensityRun, 0),
-		math.max(intensityWalk - intensityRun, 0), rate, delta)
+	self2.pos_cached, self2.ang_cached = self:WalkBob(target_pos, Angle(target_ang.x, target_ang.y, target_ang.z), math.max(intensityBreath - intensityWalk - intensityRun, 0), math.max(intensityWalk - intensityRun, 0), rate, delta)
 end
 
 local rft, eyeAngles, viewPunch, oldEyeAngles, delta, motion, counterMotion, compensation, fac, positionCompensation, swayRate, wiggleFactor, flipFactor
@@ -491,10 +487,6 @@ local SwayLerpP = 0
 function SWEP:Sway(pos, ang, ftv)
 	local self2 = self:GetTable()
 	if not self:OwnerIsValid() then return pos, ang end
-
-	----[[CONVAR]]----
-	fac = gunswaycvar:GetFloat() * 3 * ((1 - ((self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) or 0)) * 0.85 + 0.15)
-	flipFactor = (self2.ViewModelFlip and -1 or 1)
 
 	----[[INIT VARS]]----
 	delta = delta or Angle()
@@ -526,23 +518,24 @@ function SWEP:Sway(pos, ang, ftv)
 
 	local SwayMul = 0.75 * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.4)
 	local SwaySmoothing = 25
+	local SwayFac = gunswaycvar:GetFloat()
 
 	SwayLerpY = Lerp(FrameTime() * SwaySmoothing, SwayLerpY, motion.y)
 	SwayLerpP = Lerp(FrameTime() * SwaySmoothing, SwayLerpP, motion.p)
 
 	--Yaw
-	pos:Add(ang:Right() * SwayLerpY * SwayMul * 0.15)
-	pos:Add(ang:Up() * -SwayLerpY * SwayMul * 0.1)
-	pos:Add(ang:Forward() * -math.abs(SwayLerpY) * SwayMul * 0.1)
-	ang:RotateAroundAxis(ang:Right(), -math.abs(SwayLerpY) * SwayMul * 0.25)
-	ang:RotateAroundAxis(ang:Up(), SwayLerpY * SwayMul * 0.75)
-	ang:RotateAroundAxis(ang:Forward(), -SwayLerpY * SwayMul * 2)
+	pos:Add(ang:Right() * SwayLerpY * SwayMul * SwayFac * 0.15)
+	pos:Add(ang:Up() * -SwayLerpY * SwayMul * SwayFac * 0.1)
+	pos:Add(ang:Forward() * -math.abs(SwayLerpY) * SwayMul * SwayFac * 0.1)
+	ang:RotateAroundAxis(ang:Right(), -math.abs(SwayLerpY) * SwayMul * SwayFac * 0.25)
+	ang:RotateAroundAxis(ang:Up(), SwayLerpY * SwayMul * SwayFac * 0.75)
+	ang:RotateAroundAxis(ang:Forward(), -SwayLerpY * SwayMul * SwayFac * 2)
 
 	--Pitch
-	pos:Add(ang:Up() * SwayLerpP * (SwayMul * 1.5) * 0.3)
-	pos:Add(ang:Forward() * -math.abs(SwayLerpP) * (SwayMul * 1.5) * 0.15)
-	ang:RotateAroundAxis(ang:Right(), -SwayLerpP * (SwayMul * 1.5) * 1.25)
-	ang:RotateAroundAxis(ang:Forward(), SwayLerpP * (SwayMul * 1.5) * 0.5)
+	pos:Add(ang:Up() * SwayLerpP * (SwayMul * 1.5) * SwayFac * 0.3)
+	pos:Add(ang:Forward() * -math.abs(SwayLerpP) * (SwayMul * 1.5) * SwayFac * 0.15)
+	ang:RotateAroundAxis(ang:Right(), -SwayLerpP * (SwayMul * 1.5) * SwayFac * 1.25)
+	ang:RotateAroundAxis(ang:Forward(), SwayLerpP * (SwayMul * 1.5) * SwayFac * 0.5)
 
 	--https://cdn.discordapp.com/attachments/973478781207601222/986291551963594752/IMG_20220614_210314_HDR.jpg
 	--Yeah, this photo was taken by me
