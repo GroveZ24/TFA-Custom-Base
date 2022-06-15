@@ -440,6 +440,7 @@ function SWEP:CalculateViewModelOffset(delta)
 	end
 
 	if not sv_tfa_recoil_legacy:GetBool() and cl_tfa_viewmodel_vp_enabled:GetBool() then
+	--[[
 		if self:HasRecoilLUT() then
 			if not ironSights then
 				local ang = self:GetRecoilLUTAngle()
@@ -458,6 +459,7 @@ function SWEP:CalculateViewModelOffset(delta)
 				-ViewModelPunch_MaxVertialOffset,
 				ViewModelPunch_MaxVertialOffset)
 		end
+	--]]
 	end
 
 	if not cv_customgunbob:GetBool() then
@@ -516,7 +518,7 @@ function SWEP:Sway(pos, ang, ftv)
 		motion = LerpAngle(rft * swayRate, motion, delta + compensation)
 	end
 
-	local SwayMul = 0.75 * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.4)
+	local SwayMul = 0.8 * (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.4)
 	local SwaySmoothing = 25
 	local SwayFac = gunswaycvar:GetFloat()
 
