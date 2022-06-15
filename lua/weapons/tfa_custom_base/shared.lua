@@ -4,20 +4,6 @@ DEFINE_BASECLASS("tfa_gun_base")
 
 SWEP.HasFlashlight = false
 
-----[[DISALLOW MOVEMENT IN CUSTOMIZATION]]----
-
-if CLIENT then
-	hook.Add("StartCommand", "TFA_DisallowMovement", function(ply, ucmd)
-		if ply:GetActiveWeapon():GetInspectingProgress() > 0.01 then
-			RunConsoleCommand("-forward")
-			RunConsoleCommand("-back")
-			RunConsoleCommand("-moveright")
-			RunConsoleCommand("-moveleft")
-			ucmd:RemoveKey(IN_JUMP)
-		end
-	end)
-end
-
 ----[[DRAW SINGLE RETICLE]]----
 
 function DrawSingleReticle()
