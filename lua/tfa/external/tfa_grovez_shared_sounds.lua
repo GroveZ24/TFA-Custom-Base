@@ -1,6 +1,8 @@
 local path = "weapons/tfa_grovez/shared/"
 local pref = "TFA_GROVEZ.SHARED"
 
+TFA.AddSound(pref..".BLANK", CHAN_AUTO, 1, 75, {99, 101}, path.."blank.wav", ")")
+
 TFA.AddSound(pref..".ADS_PISTOL_IN", CHAN_AUTO, 1, 40, {99, 101}, {path.."ads/ads_pistol_up_01.wav", path.."ads/ads_pistol_up_02.wav", path.."ads/ads_pistol_up_03.wav", path.."ads/ads_pistol_up_04.wav", path.."ads/ads_pistol_up_05.wav", path.."ads/ads_pistol_up_06.wav"}, ")")
 TFA.AddSound(pref..".ADS_PISTOL_OUT", CHAN_AUTO, 1, 40, {99, 101}, {path.."ads/ads_pistol_down_01.wav", path.."ads/ads_pistol_down_02.wav", path.."ads/ads_pistol_down_03.wav", path.."ads/ads_pistol_down_04.wav", path.."ads/ads_pistol_down_05.wav", path.."ads/ads_pistol_down_06.wav"}, ")")
 TFA.AddSound(pref..".ADS_RIFLE_IN", CHAN_AUTO, 1, 40, {99, 101}, {path.."ads/ads_rifle_up_01.wav", path.."ads/ads_rifle_up_02.wav", path.."ads/ads_rifle_up_03.wav", path.."ads/ads_rifle_up_04.wav", path.."ads/ads_rifle_up_05.wav", path.."ads/ads_rifle_up_06.wav", path.."ads/ads_rifle_up_07.wav"}, ")")
