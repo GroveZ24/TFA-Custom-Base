@@ -177,8 +177,9 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 		return LerpUnclamped(math.ease.InElastic(fraction), from, to)
 	end
 
-	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.25)
+	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
 	local AnimSmoothing = 20
+	local Mul2 = 1.75
 
 	----[[LANDING]]----
 
@@ -220,12 +221,12 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	LandingFractionAngUpLerp = Lerp(delta * AnimSmoothing, LandingFractionAngUpLerp, LandingAngUp * JumpADSMul * 0)
 	LandingFractionAngFwLerp = Lerp(delta * AnimSmoothing, LandingFractionAngFwLerp, LandingAngFw * JumpADSMul * 1.5)
 
-	pos:Add(ri * LandingFractionPosRiLerp)
-	pos:Add(fw * LandingFractionPosFwLerp)
-	pos:Add(up * LandingFractionPosUpLerp)
-	ang:RotateAroundAxis(ri, LandingFractionAngRiLerp)
-	ang:RotateAroundAxis(up, LandingFractionAngUpLerp)
-	ang:RotateAroundAxis(fw, LandingFractionAngFwLerp)
+	pos:Add(ri * LandingFractionPosRiLerp * Mul2)
+	pos:Add(fw * LandingFractionPosFwLerp * Mul2)
+	pos:Add(up * LandingFractionPosUpLerp * Mul2)
+	ang:RotateAroundAxis(ri, LandingFractionAngRiLerp * Mul2)
+	ang:RotateAroundAxis(up, LandingFractionAngUpLerp * Mul2)
+	ang:RotateAroundAxis(fw, LandingFractionAngFwLerp * Mul2)
 
 	----[[JUMPING]]----
 
@@ -267,12 +268,12 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	JumpingFractionAngUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngUpLerp, JumpingPosRi * JumpADSMul * 0)
 	JumpingFractionAngFwLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngFwLerp, JumpingAngFw * JumpADSMul * -1.5)
 
-	pos:Add(ri * JumpingFractionPosRiLerp)
-	pos:Add(fw * JumpingFractionPosFwLerp)
-	pos:Add(up * JumpingFractionPosUpLerp)
-	ang:RotateAroundAxis(ri, JumpingFractionAngRiLerp)
-	ang:RotateAroundAxis(up, JumpingFractionAngUpLerp)
-	ang:RotateAroundAxis(fw, JumpingFractionAngFwLerp)	
+	pos:Add(ri * JumpingFractionPosRiLerp * Mul2)
+	pos:Add(fw * JumpingFractionPosFwLerp * Mul2)
+	pos:Add(up * JumpingFractionPosUpLerp * Mul2)
+	ang:RotateAroundAxis(ri, JumpingFractionAngRiLerp * Mul2)
+	ang:RotateAroundAxis(up, JumpingFractionAngUpLerp * Mul2)
+	ang:RotateAroundAxis(fw, JumpingFractionAngFwLerp * Mul2)	
 	
 	--Literally how I code this shit instead of sleeping (2 days well spent): https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
 	
