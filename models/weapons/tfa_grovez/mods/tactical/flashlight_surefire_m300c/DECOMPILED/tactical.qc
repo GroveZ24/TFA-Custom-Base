@@ -11,6 +11,19 @@ $bodygroup "Tactical"
 	studio "tactical_2.smd"
 }
 
+//TEXTUREGROUPS
+$texturegroup color
+{
+	{
+		"M300C"
+		"Surefire_Scout_Mount"
+	}
+	{
+		"M300C_Tan"
+		"Surefire_Scout_Mount_Tan"
+	}
+}
+
 //ZALOOPA
 $surfaceprop "default"
 $contents "solid"

@@ -2,14 +2,14 @@ if not ATTACHMENT then
 	ATTACHMENT = {}
 end
 
-ATTACHMENT.Name = "Surefire M300C (Scout mount)"
+ATTACHMENT.Name = "Surefire M300C (HSP Thorntail mount, Tan)"
 ATTACHMENT.ShortName = "M300C"
-ATTACHMENT.Icon = "entities/grovez_flashlight_surefire_m300c_scout.png"
+ATTACHMENT.Icon = "entities/grovez_flashlight_surefire_m300c_thorntail_tan.png"
 ATTACHMENT.Description = {}
 
 ATTACHMENT.WeaponTable = {
 	["VElements"] = {
-		["flashlight_m300c_scout"] = {
+		["flashlight_m300c_thorntail_tan"] = {
 			["active"] = true
 		}
 	},

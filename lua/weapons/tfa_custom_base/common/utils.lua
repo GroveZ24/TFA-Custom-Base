@@ -963,7 +963,8 @@ function SWEP:GetAimAngle()
 	elseif self:HasRecoilLUT() then
 		ang:Add(self:GetRecoilLUTAngle())
 	elseif self.FireBulletsFromBarrel then
-		ang:Add(self:GetMuzzlePos().Ang - ang)
+		--ang:Add(self:GetMuzzlePos().Ang - ang)
+		ang:Add(self:GetMuzzlePos().Ang - self:GetOwner():GetViewPunchAngles())
 	else
 		ang:Add(self:GetOwner():GetViewPunchAngles())
 	end
