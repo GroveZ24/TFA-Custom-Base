@@ -3,11 +3,10 @@
 	"$basetexture"				"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\Surefire_Scout_Thorntail_D"
 	"$bumpmap"					"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\Surefire_Scout_Thorntail_N"
 	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\Surefire_Scout_Thorntail_E"
-	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
 
 	"$envmap"					"env_cubemap"
 	"$envmapfresnel"			".25"
-	"$envmaptint"				"[ .2 .2 .2 ]"
+	"$envmaptint"				"[ .3 .3 .3 ]"
 
 	"$phong"					"1"
 	"$phongboost"				"30"

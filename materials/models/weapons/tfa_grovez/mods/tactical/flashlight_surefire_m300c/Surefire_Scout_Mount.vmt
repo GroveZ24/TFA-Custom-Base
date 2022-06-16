@@ -3,7 +3,6 @@
 	"$basetexture"				"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\Surefire_Scout_Mount_D"
 	"$bumpmap"					"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\Surefire_Scout_Mount_N"
 	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\Surefire_Scout_Mount_E"
-	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
 
 	"$envmap"					"env_cubemap"
 	"$envmapfresnel"			".25"
