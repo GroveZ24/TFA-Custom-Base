@@ -3,7 +3,7 @@ DEFINE_BASECLASS("tfa_gun_base")
 ----[[CUSTOM STATS]]----
 
 SWEP.HasFlashlight = false
-SWEP.FireBulletsFromBarrel = false
+--SWEP.FireBulletsFromBarrel = true
 
 ----[[DRAW SINGLE RETICLE]]----
 
