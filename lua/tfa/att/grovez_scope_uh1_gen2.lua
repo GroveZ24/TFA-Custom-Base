@@ -5,7 +5,11 @@ end
 ATTACHMENT.Name = "Vortex AMG UH-1 Gen II"
 ATTACHMENT.ShortName = "UH-1"
 ATTACHMENT.Icon = "entities/grovez_scope_uh1_gen2.png"
-ATTACHMENT.Description = {}
+ATTACHMENT.Description = {
+	Color(50, 255, 50), "[+] Zoom: +10%",
+	Color(255, 50, 50), "[-] Ergonomics: -3",
+	Color(255, 255, 255), "[=] Weight: +0.312"
+}
 
 ATTACHMENT.WeaponTable = {
 	["VElements"] = {
@@ -17,7 +21,7 @@ ATTACHMENT.WeaponTable = {
 		}
 	},
 	["IronSightsPos"] = function(wep, val)
-		return val + Vector(0.11, 0, -1.22)
+		return val + wep.SightOffset_UH1_GEN2 or val
 	end,
 	["Secondary"] = {
 		["IronFOV"] = function(wep, val)

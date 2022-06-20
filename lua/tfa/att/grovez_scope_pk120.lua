@@ -5,7 +5,11 @@ end
 ATTACHMENT.Name = "1П87"
 ATTACHMENT.ShortName = "ПК120"
 ATTACHMENT.Icon = "entities/grovez_scope_pk120.png"
-ATTACHMENT.Description = {}
+ATTACHMENT.Description = {
+	Color(50, 255, 50), "[+] Zoom: +5%",
+	Color(255, 50, 50), "[-] Ergonomics: -4",
+	Color(255, 255, 255), "[=] Weight: +0.298"
+}
 
 ATTACHMENT.WeaponTable = {
 	["VElements"] = {
@@ -17,7 +21,7 @@ ATTACHMENT.WeaponTable = {
 		}
 	},
 	["IronSightsPos"] = function(wep, val)
-		return val + Vector(0.145, 0, -1.5)
+		return val + wep.SightOffset_PK120 or val
 	end,
 	["Secondary"] = {
 		["IronFOV"] = function(wep, val)
