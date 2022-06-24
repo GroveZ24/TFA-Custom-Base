@@ -3,6 +3,7 @@ DEFINE_BASECLASS("tfa_gun_base")
 ----[[CUSTOM STATS]]----
 
 SWEP.HasFlashlight = false
+SWEP.Ergonomics = 10
 
 ----[[DRAW SINGLE RETICLE]]----
 
@@ -126,7 +127,10 @@ end
 ----[[STAT CACHE BLACKLIST]]----
 
 SWEP.StatCache_Blacklist = {
-	--Used for dynamic stats, empty for now
+	["IronSightTime"] = true,
+	["MoveSpeed"] = true,
+	["Ergonomics"] = true,
+	["Weight"] = true
 }
 
 ----[[THINK]]----
@@ -142,8 +146,15 @@ end
 ----[[THINK2: ELECTRIC BOOGALOO]]----
 
 function SWEP:Think2(...)
-	--Used for dynamic stats, empty for now
-	
+	self.IronSightTime = (1.5 - (self:GetStat("Ergonomics") * 0.01)) * 0.4
+	self.MoveSpeed = 1 - ((self:GetStat("Weight") * 0.01) * 0.25)
+
+	if CLIENT then -- Debug
+		--print("------------------")
+		--print("Ergonomics: " .. self:GetStat("Ergonomics"))
+		--print("Weight: " .. self:GetStat("Weight"))
+	end
+
 	return BaseClass.Think2(self, ...)
 end
 
