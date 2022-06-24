@@ -23,6 +23,28 @@ hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
 	end
 end)
 
+----[[MAG DISCARD]]----
+
+function SWEP:TFAMagDiscard()
+	if SERVER then
+		if self.Shotgun == true then return end
+
+		if self:Clip1() >= 1 and self:GetStat("Akimbo") and (not self:GetStat("DisableChambering")) then
+			if self:Clip1() >= 2 then
+				self:SetClip1(2)
+			else
+				self:SetClip1(1)
+			end
+		elseif self:Clip1() >= 1 and self:GetStat("Akimbo") and self:GetStat("DisableChambering") then
+			self:SetClip1(0)
+		elseif self:Clip1() >= 1 and (not self:GetStat("DisableChambering")) then
+			self:SetClip1(1)
+		else
+			self:SetClip1(0)
+		end
+	end
+end
+
 ----[[DRAW SINGLE RETICLE]]----
 
 function DrawSingleReticle()
