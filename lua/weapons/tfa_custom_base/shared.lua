@@ -4,6 +4,24 @@ DEFINE_BASECLASS("tfa_gun_base")
 
 SWEP.HasFlashlight = false
 SWEP.Ergonomics = 10
+SWEP.CanReloadWhileSprinting = false
+
+----[[DISALLOW SPRINT ON RELOADS]]----
+
+hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
+	local wep = ply:GetActiveWeapon()
+
+	if ply:IsNPC() then return end
+	if not wep.IsTFAWeapon then return end
+	if not ply:Alive() then return end
+	if wep.CanReloadWhileSprinting then return end
+
+	local stat = wep:GetStatus()
+
+	if TFA.Enum.ReloadStatus[stat] then
+		cmd:RemoveKey(IN_SPEED)
+	end
+end)
 
 ----[[DRAW SINGLE RETICLE]]----
 
