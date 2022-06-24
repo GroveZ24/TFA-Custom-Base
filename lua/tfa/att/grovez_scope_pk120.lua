@@ -28,6 +28,8 @@ ATTACHMENT.WeaponTable = {
 			return val * 0.95
 		end
 	},
+	["Ergonomics"] = function(wep, val) return val - 4 end,
+	["Weight"] = function(wep, val) return val + 0.298 end,
 	["ScopeVElement"] = "scope_pk120",
 	["Reticle"] = "models/weapons/tfa_grovez/mods/scopes/scope_pk120/PK120_Reticle"
 }

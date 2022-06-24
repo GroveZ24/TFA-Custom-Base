@@ -28,6 +28,8 @@ ATTACHMENT.WeaponTable = {
 			return val * 0.9
 		end
 	},
+	["Ergonomics"] = function(wep, val) return val - 3 end,
+	["Weight"] = function(wep, val) return val + 0.312 end,
 	["ScopeVElement"] = "scope_uh1_gen2",
 	["Reticle"] = "models/weapons/tfa_grovez/mods/scopes/scope_uh1_gen2/UH1_Reticle"
 }
