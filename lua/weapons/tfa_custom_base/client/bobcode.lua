@@ -37,8 +37,8 @@ local WalkPosLagged = Vector()
 local gunbob_intensity_cvar = GetConVar("cl_tfa_gunbob_intensity")
 local gunbob_intensity = 0
 
-SWEP.VMOffsetWalk = Vector(-0.25, -1, -0.5)
-SWEP.VMAngleWalk = Angle(1, 2, -3)
+SWEP.VMOffsetWalk = Vector(0, 0, 0)
+SWEP.VMAngleWalk = Angle(0, 0, 0)
 
 SWEP.footstepTotal = 0
 SWEP.footstepTotalTarget = 0
@@ -127,7 +127,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 
 	----[[MULTIPLIERS]]----
 	breathIntensity = breathIntensitySmooth * gunbob_intensity * 1.5
-	walkIntensity = walkIntensitySmooth * gunbob_intensity * 1.5
+	walkIntensity = walkIntensitySmooth * gunbob_intensity * 1.5 * math.abs(1 - self:GetSprintProgress())
 
 	local breatheMult2 = math.Clamp(self2.IronSightsProgressUnpredicted2 or self:GetIronSightsProgress(), 0, 1)
 	local breatheMult1 = (1 - breatheMult2) - (self:GetInspectingProgress() * 0.75)
@@ -297,7 +297,7 @@ end
 
 function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
 	local self2 = self:GetTable()
-	if not IsValid(self:GetOwner()) or not gunbob_intensity or self2.Sprint_Mode == TFA.Enum.LOCOMOTION_ANI then return pos, ang end
+	if not IsValid(self:GetOwner()) or not gunbob_intensity then return pos, ang end
 
 	local flip_v = self2.ViewModelFlip and -1 or 1
 	local eyeAngles = self:GetOwner():EyeAngles()
@@ -332,8 +332,6 @@ function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
 			pos:Add(localUp * math.sin(self2.ti * rate_r) * scale_r * 0.1 * intensity * 0.33)
 		end
 	end
-	
-	--I dunno why I put it there: https://sun9-42.userapi.com/s/v1/ig2/yeRHvGmVTE71Ppjd4wplC6BWkBFL48ydFdy-Whh4ZJrDe3FYHoWms9gXcghuIll6SiCebW6f2zo9tpZFWhl408a8.jpg?size=486x1024&quality=96&type=album
 
 	return pos, ang
 end
