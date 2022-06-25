@@ -219,8 +219,7 @@ SWEP.StatCache_Blacklist = {
 	["IronSightTime"] = true,
 	["MoveSpeed"] = true,
 	["Ergonomics"] = true,
-	["Weight"] = true,
-	["MagSkin"] = true
+	["Weight"] = true
 }
 
 ----[[THINK]]----
