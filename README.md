@@ -10,11 +10,11 @@ Custom TFA Sub-base with new features and attachments
 - Custom gun bobbing and other procedurals
 - Simplified holosights creation
 - Free View Model (`cl_tfa_debug_freevm 1` to toggle free view model transform)
+- Highly customizable magazine drop on reloads
 
 ### Work in progress features list:
 - Free look 
 - Free aim, free sway
-- Magazine drop (with custom sounds)
 - IR laser
 - Hybrid sights
 - And more
