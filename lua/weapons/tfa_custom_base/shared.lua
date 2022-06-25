@@ -2,9 +2,7 @@ DEFINE_BASECLASS("tfa_gun_base")
 
 ----[[CUSTOM STATS]]----
 
-SWEP.HasFlashlight = false
 SWEP.Ergonomics = 10
-SWEP.CanReloadWhileSprinting = false
 
 ----[[EVENT TABLE: MAG DISCARD]]----
 
@@ -78,6 +76,8 @@ end
 
 ----[[DISALLOW SPRINT ON RELOADS]]----
 
+SWEP.CanReloadWhileSprinting = false
+
 hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
 	local wep = ply:GetActiveWeapon()
 
@@ -88,7 +88,7 @@ hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
 
 	local stat = wep:GetStatus()
 
-	if TFA.Enum.ReloadStatus[stat] then
+	if stat ~= TFA.Enum.STATUS_IDLE then
 		cmd:RemoveKey(IN_SPEED)
 	end
 end)
@@ -187,6 +187,8 @@ if CLIENT then
 end
 
 ----[[FLASHLIGHT STUFF]]----
+
+SWEP.HasFlashlight = false
 
 hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabled)
 	return ply:GetActiveWeapon().HasFlashlight
