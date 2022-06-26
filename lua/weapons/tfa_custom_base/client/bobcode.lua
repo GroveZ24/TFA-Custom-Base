@@ -37,8 +37,8 @@ local WalkPosLagged = Vector()
 local gunbob_intensity_cvar = GetConVar("cl_tfa_gunbob_intensity")
 local gunbob_intensity = 0
 
-SWEP.VMOffsetWalk = Vector(-0.25, -0.75, -0.25)
-SWEP.VMAngleWalk = Angle(1, 2, -3)
+SWEP.WalkPos = Vector(-0.25, -0.75, -0.25)
+SWEP.WalkAng = Angle(1, 2, -3)
 
 SWEP.footstepTotal = 0
 SWEP.footstepTotalTarget = 0
@@ -113,8 +113,8 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	----[[PRECEDING CALCS]]----
 	walkIntensitySmooth = l_Lerp(delta * 10 * rateScaleFac, walkIntensitySmooth, walkIntensity)
 	breathIntensitySmooth = l_Lerp(delta * 10 * rateScaleFac, breathIntensitySmooth, breathIntensity)
-	walkVec = LerpVector(walkIntensitySmooth, vector_origin, self2.VMOffsetWalk)
-	walkAng = LerpAngle(walkIntensitySmooth, angle_origin, self2.VMAngleWalk)
+	walkVec = LerpVector(walkIntensitySmooth, vector_origin, self2.WalkPos)
+	walkAng = LerpAngle(walkIntensitySmooth, angle_origin, self2.WalkAng)
 	ownerVelocity = self:GetOwner():GetVelocity()
 	zVelocity = ownerVelocity.z
 	zVelocitySmooth = l_Lerp(delta * 7 * rateScaleFac, zVelocitySmooth, zVelocity)
@@ -274,9 +274,9 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	ang:RotateAroundAxis(ri, JumpingFractionAngRiLerp * Mul2)
 	ang:RotateAroundAxis(up, JumpingFractionAngUpLerp * Mul2)
 	ang:RotateAroundAxis(fw, JumpingFractionAngFwLerp * Mul2)	
-	
+
 	--Literally how I code this shit instead of sleeping (2 days well spent): https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
-	
+
 	----[[ROLLING WITH HORIZONTAL MOTION]]----
 	local xVelocityClamped = xVelocitySmooth
 
@@ -298,7 +298,7 @@ end
 function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
 	local self2 = self:GetTable()
 	if not IsValid(self:GetOwner()) or not gunbob_intensity then return pos, ang end
-	
+
 	local flip_v = self2.ViewModelFlip and -1 or 1
 	local eyeAngles = self:GetOwner():EyeAngles()
 	local localUp = ang:Up()
@@ -310,7 +310,7 @@ function SWEP:SprintBob(pos, ang, intensity, origPos, origAng)
 
 	intensity = intensity * gunbob_intensity * 1.5
 	gunbob_intensity = gunbob_intensity_cvar:GetFloat()
-	
+
 	if not self2.Sprint_Mode == TFA.Enum.LOCOMOTION_ANI then
 		if intensity > 0.005 then
 			if self2.SprintStyle == 1 then

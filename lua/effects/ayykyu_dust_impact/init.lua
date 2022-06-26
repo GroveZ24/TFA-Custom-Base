@@ -14,13 +14,16 @@ function EFFECT:Init(data)
 
 	for i = 0, math.Round(8 * sfac) do
 		local p = emitter:Add("particle/particle_smokegrenade", posoffset)
+
 		p:SetVelocity(90 * math.sqrt(i) * forward)
 		p:SetAirResistance(400)
 		p:SetStartAlpha(math.Rand(0, 0))
 		p:SetEndAlpha(0)
 		p:SetDieTime(math.Rand(0.75, 1) * (1 + math.sqrt(i) / 3))
+
 		local iclamped = math.Clamp(i, 1, 8)
 		local iclamped_sqrt = math.sqrt(iclamped / 8) * 8
+
 		p:SetStartSize(math.Rand(1, 1) * sfac_sqrt * iclamped_sqrt)
 		p:SetEndSize(math.Rand(1.5, 1.75) * sfac_sqrt * iclamped)
 		p:SetRoll(math.Rand(-25, 25))
@@ -37,5 +40,5 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
-return false
+	return false
 end

@@ -12,7 +12,7 @@ $bodygroup "Tactical"
 }
 
 //TEXTUREGROUPS
-$texturegroup color
+$texturegroup skin
 {
 	{
 		"M300C"

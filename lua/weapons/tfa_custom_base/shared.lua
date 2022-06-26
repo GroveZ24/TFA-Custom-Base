@@ -74,25 +74,6 @@ function SWEP:TFAMagDrop()
 	end
 end
 
-----[[DISALLOW SPRINT ON RELOADS]]----
-
-SWEP.CanReloadWhileSprinting = false
-
-hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
-	local wep = ply:GetActiveWeapon()
-
-	if ply:IsNPC() then return end
-	if not wep.IsTFAWeapon then return end
-	if not ply:Alive() then return end
-	if wep.CanReloadWhileSprinting then return end
-
-	local stat = wep:GetStatus()
-
-	if stat ~= TFA.Enum.STATUS_IDLE then
-		cmd:RemoveKey(IN_SPEED)
-	end
-end)
-
 ----[[DRAW SINGLE RETICLE]]----
 
 function DrawSingleReticle()
@@ -147,17 +128,53 @@ function SWEP:TranslateFOV(fov)
 	return ret
 end
 
-----[[SIGHTS POSE PARAMETER]]----
+----[[MOVEMENT RELATED]]----
 
-function SWEP:SightsPoseParameter()
-	local VM = LocalPlayer():GetViewModel() or NULL
-	local IronSightProgress = LocalPlayer():GetActiveWeapon().IronSightsProgress
+SWEP.CanReloadWhileSprinting = false
 
-	if VM:IsValid() then
-		self.OwnerViewModel:SetPoseParameter("sights", IronSightProgress)
-		self.OwnerViewModel:InvalidateBoneCache()
+hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
+	local wep = ply:GetActiveWeapon()
+
+	if ply:IsNPC() then return end
+	if not wep.IsTFAWeapon then return end
+	if not ply:Alive() then return end
+	if wep.CanReloadWhileSprinting then return end
+
+	local stat = wep:GetStatus()
+
+	if stat ~= TFA.Enum.STATUS_IDLE then
+		cmd:RemoveKey(IN_SPEED)
 	end
+end)
+
+----[[JUMP ANIMS]]----
+
+if SERVER then
+	util.AddNetworkString("TFA_HasLanded")
+	util.AddNetworkString("TFA_HasJumped")
+
+	hook.Add("OnPlayerHitGround", "TFA_Landing_Anim", function(ply, inWater, onFloater, speed)
+		net.Start("TFA_HasLanded")
+		net.Send(ply)
+	end)
+
+	hook.Add("PlayerTick", "TFA_Jumping_Anim", function(ply)
+		if IsValid(ply) and ply:Alive() then 
+			if ply:KeyPressed(IN_JUMP) and ply:OnGround() then
+				net.Start("TFA_HasJumped")
+				net.Send(ply)
+			end
+		end
+	end)
 end
+
+----[[FLASHLIGHT]]----
+
+SWEP.HasFlashlight = false
+
+hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabled)
+	return ply:GetActiveWeapon().HasFlashlight
+end)
 
 ----[[FREE VIEWMODEL]]----
 
@@ -186,33 +203,16 @@ if CLIENT then
 	end
 end
 
-----[[FLASHLIGHT STUFF]]----
+----[[SIGHTS POSE PARAMETER]]----
 
-SWEP.HasFlashlight = false
+function SWEP:SightsPoseParameter()
+	local VM = LocalPlayer():GetViewModel() or NULL
+	local IronSightProgress = LocalPlayer():GetActiveWeapon().IronSightsProgress
 
-hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabled)
-	return ply:GetActiveWeapon().HasFlashlight
-end)
-
-----[[JUMP ANIMS STUFF]]----
-
-if SERVER then
-	util.AddNetworkString("TFA_HasLanded")
-	util.AddNetworkString("TFA_HasJumped")
-
-	hook.Add("OnPlayerHitGround", "TFA_Landing_Anim", function(ply, inWater, onFloater, speed)
-		net.Start("TFA_HasLanded")
-		net.Send(ply)
-	end)
-	
-	hook.Add("PlayerTick", "TFA_Jumping_Anim", function(ply)
-		if IsValid(ply) and ply:Alive() then 
-			if ply:KeyPressed(IN_JUMP) and ply:OnGround() then
-				net.Start("TFA_HasJumped")
-				net.Send(ply)
-			end
-		end
-	end)
+	if VM:IsValid() then
+		self.OwnerViewModel:SetPoseParameter("sights", IronSightProgress)
+		self.OwnerViewModel:InvalidateBoneCache()
+	end
 end
 
 ----[[STAT CACHE BLACKLIST]]----
@@ -240,8 +240,7 @@ function SWEP:Think2(...)
 	self.IronSightTime = (1.5 - (self:GetStat("Ergonomics") * 0.01)) * 0.4
 	self.MoveSpeed = 1 - ((self:GetStat("Weight") * 0.01) * 0.25)
 
-	if CLIENT then -- Debug
-		--print("------------------")
+	if CLIENT then
 		--print("Ergonomics: " .. self:GetStat("Ergonomics"))
 		--print("Weight: " .. self:GetStat("Weight"))
 	end

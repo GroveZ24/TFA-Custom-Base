@@ -8,7 +8,6 @@ local LerpVector = LerpVector
 
 local sv_cheats = GetConVar("sv_cheats")
 local host_timescale = GetConVar("host_timescale")
-
 local cv_fov = GetConVar("fov_desired")
 local cl_vm_nearwall = GetConVar("cl_tfa_viewmodel_nearwall")
 
@@ -28,7 +27,6 @@ local cl_tfa_viewmodel_vp_yaw = GetConVar("cl_tfa_viewmodel_vp_yaw")
 local cl_tfa_viewmodel_vp_yaw_is = GetConVar("cl_tfa_viewmodel_vp_yaw_is")
 
 local sv_tfa_recoil_legacy = GetConVar("sv_tfa_recoil_legacy")
-
 local cv_customgunbob = GetConVar("cl_tfa_gunbob_custom")
 
 local function Lerp(t, a, b)
@@ -169,7 +167,7 @@ function SWEP:CalculateNearWall(p, a)
 
 	self:UpdateWeaponLength()
 
-	local nw_offset_vec = LerpVector(self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress(), self2.NearWallVector, self2.NearWallVectorADS)
+	local nw_offset_vec = LerpVector(self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress(), self2.NearWallPos, self2.NearWallPosADS)
 	local off = self2.WeaponLength - dist
 	self2.LastNearWallOffset = self2.LastNearWallOffset or 0
 

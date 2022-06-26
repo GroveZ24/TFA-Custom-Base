@@ -3,8 +3,8 @@ local angle_zero = Angle()
 
 SWEP.WeaponLength = 0
 
-SWEP.NearWallVector = Vector(0.091287083923817, -0.4564354121685, -0.18257416784763)
-SWEP.NearWallVectorADS = Vector(0, 0, 0)
+SWEP.NearWallPos = Vector(0.091287083923817, -0.4564354121685, -0.18257416784763)
+SWEP.NearWallPosADS = Vector(0.091287083923817 * 0.15, -0.4564354121685 * 0.5, -0.18257416784763 * 0.25)
 
 SWEP.ViewModelPunchPitchMultiplier = 0.5
 SWEP.ViewModelPunchPitchMultiplier_IronSights = 0.09
