@@ -4,7 +4,7 @@ $scale 37.5
 //MODELNAME
 $modelname "model.mdl"
 
-//BODYGROUPS
+//MODEL
 $model "Scope" "Scope.smd"
 
 //ZALOOPA

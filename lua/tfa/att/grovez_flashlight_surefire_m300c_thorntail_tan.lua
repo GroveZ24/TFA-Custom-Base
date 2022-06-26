@@ -19,10 +19,13 @@ ATTACHMENT.WeaponTable = {
 			["active"] = true
 		}
 	},
+	["ViewModelBoneMods"] = {
+		["lightsource"] = {scale = Vector(1, 1, 1), pos = Vector(1.0, -16.35, 5.02), angle = Angle(0, 0, 0)}
+	},
 	["Ergonomics"] = function(wep, val) return val - 1 end,
 	["Weight"] = function(wep, val) return val + 0.102 end,
 	["HasFlashlight"] = true,
-	["FlashlightAttachment"] = 1,
+	["FlashlightAttachment"] = 5,
 	["FlashlightDistance"] = 175 * (3.28084 * 16),
 	["FlashlightBrightness"] = 500 * 0.01,
 	["FlashlightFOV"] = 7600 * 0.015,
