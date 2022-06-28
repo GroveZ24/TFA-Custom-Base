@@ -130,14 +130,12 @@ end
 
 ----[[MOVEMENT RELATED]]----
 
-SWEP.CanReloadWhileSprinting = false
+SWEP.CanReloadWhileSprinting = true
 
 hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
 	local wep = ply:GetActiveWeapon()
 
-	if ply:IsNPC() then return end
 	if not wep.IsTFAWeapon then return end
-	if not ply:Alive() then return end
 	if wep.CanReloadWhileSprinting then return end
 
 	local stat = wep:GetStatus()
@@ -171,6 +169,13 @@ end
 ----[[FLASHLIGHT]]----
 
 SWEP.HasFlashlight = false
+SWEP.FlashlightAttachment = 0
+SWEP.FlashlightDistance = 0
+SWEP.FlashlightBrightness = 0
+SWEP.FlashlightFOV = 0
+SWEP.FlashlightSoundToggleOn = Sound("")
+SWEP.FlashlightSoundToggleOff = Sound("")
+SWEP.FlashlightMaterial = "effects/flashlight001"
 
 hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabled)
 	return ply:GetActiveWeapon().HasFlashlight
@@ -205,12 +210,27 @@ end
 
 ----[[SIGHTS POSE PARAMETER]]----
 
+SWEP.IronSightsOffsetSmoothing = 7.5
+
+local IronSights = 0
+local IronSightsLerp = 0
+
 function SWEP:SightsPoseParameter()
 	local VM = LocalPlayer():GetViewModel() or NULL
 	local IronSightProgress = LocalPlayer():GetActiveWeapon().IronSightsProgress
+	local IronSightsBool = LocalPlayer():GetActiveWeapon():GetIronSights()
+	
+	if IronSightsBool then
+		IronSights = 1
+	else
+		IronSights = 0
+	end
+	
+	IronSightsLerp = Lerp(FrameTime() * LocalPlayer():GetActiveWeapon().IronSightsOffsetSmoothing, IronSightsLerp, IronSights)
 
 	if VM:IsValid() then
 		self.OwnerViewModel:SetPoseParameter("sights", IronSightProgress)
+		self.OwnerViewModel:SetPoseParameter("sights_offset", IronSightsLerp)
 		self.OwnerViewModel:InvalidateBoneCache()
 	end
 end
