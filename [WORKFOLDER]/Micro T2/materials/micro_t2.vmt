@@ -5,13 +5,9 @@
 	"$phongexponenttexture"		"micro_t2_e"
 	"$phongwarptexture"			"phongwarp_metal"
 
-	$detail						"micro_t2_si"
-	$detailscale				1
-	$detailblendfactor			1
-	$detailblendmode			5
-
 	"$envmap"					"env_cubemap"
 	"$envmapfresnel"			".5"
+	"$envmaptint"				"[ .3 .3 .3 ]"
 
 	"$phong"					"1"
 	"$phongboost"				"15"

@@ -8,9 +8,10 @@
 
 	"$envmap"					"env_cubemap"
 	"$envmapfresnel"			".5"
+	"$envmaptint"				"[ .3 .3 .3 ]"
 
 	"$phong"					"1"
-	"$phongboost"				"15"
+	"$phongboost"				"30"
 	"$phongfresnelranges"		"[0.32 0.72 0.99]"
 	"$phongalbedotint" 			"1"
 
