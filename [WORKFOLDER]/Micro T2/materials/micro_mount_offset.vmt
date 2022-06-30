@@ -1,0 +1,23 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"micro_mount_offset_d"
+	"$bumpmap"					"micro_mount_offset_n"
+	"$phongexponenttexture"		"micro_mount_offset_e"
+	"$phongwarptexture"			"phongwarp_metal"
+
+	"$envmap"					"env_cubemap"
+	"$envmapfresnel"			".5"
+//	"$envmaptint"				"[ .5 .5 .5 ]"
+
+	"$phong"					"1"
+	"$phongboost"				"15"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongalbedotint" 			"1"
+
+	"$rimlight"					"1"
+	"$rimlightexponent"			"33"
+	"$rimlightboost"			"5"
+	"$rimmask"					"1"
+}
+//Material setup by ShadowRUN 幸運な. 
+//You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.
