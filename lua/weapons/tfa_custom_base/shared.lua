@@ -1,8 +1,63 @@
 DEFINE_BASECLASS("tfa_gun_base")
 
+--[[
+Attachments should be:
+1 - muzzle - Muzzleflash, unsuppressed
+2 - muzzle_supp - Muzzleflash, suppressed (Also should be parrented to muzzleflash bone)
+3 - shell - Shell ejection port
+4 - camera - Camera, obviously
+5 - flashlight_lightsource - Position of flashlight's light emission (Also should be parrented to flashlight bone)
+--]]
+
+----[[PROPERTIES]]----
+
+SWEP.TFADataVersion = 0
+SWEP.Manufacturer = ""
+SWEP.Author = "Unknown"
+SWEP.Contact = ""
+SWEP.Purpose = ""
+SWEP.Instructions = ""
+SWEP.Calibre = ""
+SWEP.GRAU = nil
+SWEP.Country = ""
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
+SWEP.Type = "Rifle" -- "Pistol" "Machine Pistol" "Revolver" "Sub-Machine Gun" "Rifle" "Carbine" "Light Machine Gun" "Shotgun" "Designated Marksman Rifle" "Sniper Rifle" "Grenade" "Launcher"
+SWEP.Type_Displayed = "Assault Rifle"
+SWEP.EditedTFABase = true
+
 ----[[CUSTOM STATS]]----
 
-SWEP.Ergonomics = 10
+SWEP.Ergonomics = 30
+SWEP.Weight = 3
+
+----[[RECOIL]]----
+
+SWEP.IronRecoilMultiplier = 0.95
+SWEP.CrouchRecoilMultiplier = 0.9
+SWEP.JumpRecoilMultiplier = 1.5
+SWEP.WallRecoilMultiplier = 1
+SWEP.ChangeStateRecoilMultiplier = 1.25
+
+----[[ACCURACY]]----
+
+SWEP.CrouchAccuracyMultiplier = 0.75
+SWEP.ChangeStateAccuracyMultiplier = 2.5
+SWEP.JumpAccuracyMultiplier = 5
+SWEP.WalkAccuracyMultiplier = 1.75
+
+----[[MISC]]----
+
+SWEP.ViewModelPunchPitchMultiplier = 0
+SWEP.ViewModelPunchPitchMultiplier_IronSights = 0
+SWEP.ViewModelPunch_MaxVertialOffset = 0
+SWEP.ViewModelPunch_MaxVertialOffset_IronSights = 0
+SWEP.ViewModelPunch_VertialMultiplier = 0
+SWEP.ViewModelPunch_VertialMultiplier_IronSights = 0
+SWEP.ViewModelPunchYawMultiplier = 0
+SWEP.ViewModelPunchYawMultiplier_IronSights = 0
+
+SWEP.ToCrouchTime = 0.35
 
 ----[[EVENT TABLE: MAG DISCARD]]----
 
@@ -136,6 +191,7 @@ hook.Add("StartCommand", "TFA_Disable_Sprint", function(ply, cmd)
 	local wep = ply:GetActiveWeapon()
 
 	if not wep.IsTFAWeapon then return end
+	if not wep.EditedTFABase then return end
 	if wep.CanReloadWhileSprinting then return end
 
 	local stat = wep:GetStatus()
@@ -181,6 +237,10 @@ hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabl
 	return ply:GetActiveWeapon().HasFlashlight
 end)
 
+----[[LASER]]----
+
+SWEP.LaserDistance = 10000
+
 ----[[FREE VIEWMODEL]]----
 
 local freevm_var = CreateConVar("cl_tfa_debug_freevm", 0, {FCVAR_CLIENTCMD_CAN_EXECUTE, FCVAR_ARCHIVE})
@@ -219,13 +279,13 @@ function SWEP:SightsPoseParameter()
 	local VM = LocalPlayer():GetViewModel() or NULL
 	local IronSightProgress = LocalPlayer():GetActiveWeapon().IronSightsProgress
 	local IronSightsBool = LocalPlayer():GetActiveWeapon():GetIronSights()
-	
+
 	if IronSightsBool then
 		IronSights = 1
 	else
 		IronSights = 0
 	end
-	
+
 	IronSightsLerp = Lerp(FrameTime() * LocalPlayer():GetActiveWeapon().IronSightsOffsetSmoothing, IronSightsLerp, IronSights)
 
 	if VM:IsValid() then
@@ -241,7 +301,9 @@ SWEP.StatCache_Blacklist = {
 	["IronSightTime"] = true,
 	["MoveSpeed"] = true,
 	["Ergonomics"] = true,
-	["Weight"] = true
+	["Weight"] = true,
+	["VElements"] = true,
+	["ViewModelBoneMods"] = true
 }
 
 ----[[THINK]]----

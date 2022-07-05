@@ -285,12 +285,11 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 		xVelocityClamped = (math.sqrt((math.abs(xVelocityClamped) - 200) / 50) * 50 + 200) * sign
 	end
 
-	pos:Add(riLocal * xVelocityClamped * 0.001 * flip_v * 0.7)
-	pos:Add(fwLocal * math.abs(xVelocityClamped) * -0.0025 * 0.7)
-	pos:Add(upLocal * math.abs(xVelocityClamped) * -0.001 * 0.7)
-	ang:RotateAroundAxis(ri, math.abs(xVelocityClamped) * 0.0025 * 0.7)
-	ang:RotateAroundAxis(up, xVelocityClamped * 0.005 * 0.7)
-	ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 1.25)
+	pos:Add(riLocal * xVelocityClamped * 0.001 * flip_v * 1)
+	pos:Add(fwLocal * math.abs(xVelocityClamped) * -0.0025 * 0.75)
+	pos:Add(upLocal * math.abs(xVelocityClamped) * 0.001 * flip_v * -0.25)
+	ang:RotateAroundAxis(up, xVelocityClamped * 0.005 * 2)
+	ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 1)
 
 	return pos, ang
 end
