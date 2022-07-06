@@ -140,12 +140,12 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate * 0.5) * breathIntensity * breatheMult1 * 2)
 
 	----[[ADS WALKING]]----
-	pos:Add(riLocal * math.cos(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 0.2)
+	pos:Add(riLocal * math.cos(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 0.25)
 	pos:Add(fwLocal * math.cos(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.15)
-	pos:Add(upLocal * math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.25)
-	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.75)
+	pos:Add(upLocal * math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.2)
+	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 1.2)
 	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * -1.5)
-	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 2)
+	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 2.5)
 
 	----[[WALKING]]----
 	self2.walkTI = (self2.walkTI or 0) + delta * 150 / 60 * self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed()
@@ -285,12 +285,11 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 		xVelocityClamped = (math.sqrt((math.abs(xVelocityClamped) - 200) / 50) * 50 + 200) * sign
 	end
 
-	pos:Add(riLocal * xVelocityClamped * 0.001 * flip_v * 0.7)
-	pos:Add(fwLocal * math.abs(xVelocityClamped) * -0.0025 * 0.7)
-	pos:Add(upLocal * math.abs(xVelocityClamped) * -0.001 * 0.7)
-	ang:RotateAroundAxis(ri, math.abs(xVelocityClamped) * 0.0025 * 0.7)
-	ang:RotateAroundAxis(up, xVelocityClamped * 0.005 * 0.7)
-	ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 1.25)
+	pos:Add(riLocal * xVelocityClamped * 0.001 * flip_v * 1)
+	pos:Add(fwLocal * math.abs(xVelocityClamped) * -0.0025 * 0.75)
+	pos:Add(upLocal * math.abs(xVelocityClamped) * 0.001 * flip_v * -0.25)
+	ang:RotateAroundAxis(up, xVelocityClamped * 0.005 * 2)
+	ang:RotateAroundAxis(fw, xVelocityClamped * -0.02 * flip_v * 1)
 
 	return pos, ang
 end

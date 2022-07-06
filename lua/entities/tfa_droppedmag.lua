@@ -12,9 +12,7 @@ ENT.TextureGroup = 0
 ENT.RemovalTimer = 1
 
 ENT.ImpactSounds = {
-	"physics/metal/weapon_impact_hard1.wav",
-	"physics/metal/weapon_impact_hard2.wav",
-	"physics/metal/weapon_impact_hard3.wav"
+	"physics/metal/weapon_impact_hard1.wav"
 }
 
 function ENT:Initialize()
@@ -39,18 +37,20 @@ function ENT:Initialize()
 end
 
 function ENT:PhysicsCollide(colData, collider)
-	if colData.DeltaTime < 0.5 then return end
+	if SERVER then
+		if colData.DeltaTime < 0.5 then return end
 
-	local tbl = self.ImpactSounds
-	tbl.BaseClass = nil
+		local tbl = self.ImpactSounds
+		tbl.BaseClass = nil
 
-	local snd = ""
+		local snd = ""
 
-	if tbl then
-		snd = table.Random(tbl)
+		if tbl then
+			snd = table.Random(tbl)
+		end
+
+		self:EmitSound(snd)
 	end
-
-	self:EmitSound(snd)
 end
 
 function ENT:Think()

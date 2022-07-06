@@ -1,7 +1,7 @@
 "SpriteCard"
 {
 	$basetexture "effects/fas_dust_a"
-	$SEQUENCE_BLEND_MODE 1 //2
+	$SEQUENCE_BLEND_MODE 1
 	$MAXLUMFRAMEBLEND1 0
 	$MAXLUMFRAMEBLEND2 1
 	$depthblend 1

@@ -1,8 +1,11 @@
 //SCALE
 $scale 37.5
 
+//ORIGIN
+//$origin 0 0 0 0
+
 //MODELNAME
-$modelname "model.mdl"
+$modelname "weapons\tfa_grovez\mods\scopes\scope_uh1_gen2\scope.mdl"
 
 //MODEL
 $model "Scope" "Scope.smd"
@@ -29,4 +32,4 @@ $bonemerge "mod_scope_lens"
 $bonemerge "mod_scope_reticle"
 
 //IDLE
-$sequence idle "scope.smd"
+$sequence idle "Scope.smd"

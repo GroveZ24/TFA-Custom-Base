@@ -15,12 +15,10 @@ ATTACHMENT.Description = {
 
 ATTACHMENT.WeaponTable = {
 	["VElements"] = {
-		["flashlight_m300c_scout_black"] = {
-			["active"] = true
+		["flashlight_m300c_scout"] = {
+			["active"] = true,
+			["skin"] = 0
 		}
-	},
-	["ViewModelBoneMods"] = {
-		["lightsource"] = {scale = Vector(1, 1, 1), pos = Vector(-1.61, -15.45, 3.8), angle = Angle(0, 0, 0)}
 	},
 	["Ergonomics"] = function(wep, val) return val - 1 end,
 	["Weight"] = function(wep, val) return val + 0.116 end,
@@ -39,11 +37,27 @@ ATTACHMENT.DetachSound = "TFA_GROVEZ.SHARED.MENU_MOD_DESELECT"
 function ATTACHMENT:Attach(wep)
 	wep.FlashlightDotMaterial = nil
 	wep.FlashlightDotMaterial = Material("effects/tfa_grovez/flashlight_10")
+
+	wep.ViewModelBoneMods["tag_flashlight_lightsource"].pos = wep.FlashlightLightsourcePos_M300CScout
+	wep.ViewModelBoneMods["tag_flashlight_lightsource"].angle = wep.FlashlightLightsourceAng_M300CScout
+
+	local owner = wep:GetOwner()
+
+	if SERVER and IsValid(owner) and owner:IsPlayer() and owner:FlashlightIsOn() then
+		owner:Flashlight(false)
+	end
 end
 
 function ATTACHMENT:Detach(wep)
 	wep.FlashlightDotMaterial = nil
 	wep.FlashlightDotMaterial = Material("effects/flashlight001")
+
+	wep.ViewModelBoneMods["tag_flashlight_lightsource"].pos = wep.FlashlightLightsourcePos
+	wep.ViewModelBoneMods["tag_flashlight_lightsource"].angle = wep.FlashlightLightsourceAng
+
+	if wep:GetFlashlightEnabled() then
+		wep:ToggleFlashlight(false)
+	end
 end
 
 if not TFA_ATTACHMENT_ISUPDATING then

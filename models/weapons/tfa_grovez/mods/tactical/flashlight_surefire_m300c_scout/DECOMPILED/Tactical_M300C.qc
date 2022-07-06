@@ -1,8 +1,11 @@
 //SCALE
 $scale 37.5
 
+//ORIGIN
+//$origin 0 0 0 0
+
 //MODELNAME
-$modelname "model.mdl"
+$modelname "weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c_scout\tactical.mdl"
 
 //MODEL
 $model "Tactical" "Tactical.smd"
@@ -41,4 +44,4 @@ $bonemerge "mod_tactical"
 $bonemerge "mod_tactical_lightsource"
 
 //IDLE
-$sequence idle "tactical.smd"
+$sequence idle "Tactical.smd"

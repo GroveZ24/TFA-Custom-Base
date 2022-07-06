@@ -4,18 +4,18 @@ local angle_zero = Angle()
 SWEP.WeaponLength = 0
 
 SWEP.NearWallPos = Vector(0.091287083923817, -0.4564354121685, -0.18257416784763)
-SWEP.NearWallPosADS = Vector(0.091287083923817 * 0.15, -0.4564354121685 * 0.5, -0.18257416784763 * 0.25)
+SWEP.NearWallPosADS = Vector(SWEP.NearWallPos.x * 0.15, SWEP.NearWallPos.y * 0.5, SWEP.NearWallPos.z * 0.25)
 
-SWEP.ViewModelPunchPitchMultiplier = 0.5
-SWEP.ViewModelPunchPitchMultiplier_IronSights = 0.09
+SWEP.ViewModelPunchPitchMultiplier = 0
+SWEP.ViewModelPunchPitchMultiplier_IronSights = 0
 
-SWEP.ViewModelPunch_MaxVertialOffset = 3
-SWEP.ViewModelPunch_MaxVertialOffset_IronSights = 1.95
-SWEP.ViewModelPunch_VertialMultiplier = 1
-SWEP.ViewModelPunch_VertialMultiplier_IronSights = 0.25
+SWEP.ViewModelPunch_MaxVertialOffset = 0
+SWEP.ViewModelPunch_MaxVertialOffset_IronSights = 0
+SWEP.ViewModelPunch_VertialMultiplier = 0
+SWEP.ViewModelPunch_VertialMultiplier_IronSights = 0
 
-SWEP.ViewModelPunchYawMultiplier = 0.6
-SWEP.ViewModelPunchYawMultiplier_IronSights = 0.25
+SWEP.ViewModelPunchYawMultiplier = 0
+SWEP.ViewModelPunchYawMultiplier_IronSights = 0
 
 local onevec = Vector(1, 1, 1)
 
