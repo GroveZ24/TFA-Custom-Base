@@ -1,0 +1,23 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\scope_micro_t2\Micro_T2_Mount_Short_D"
+	"$bumpmap"					"models\weapons\tfa_grovez\mods\scopes\scope_micro_t2\Micro_T2_Mount_Short_N"
+	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\scopes\scope_micro_t2\Micro_T2_Mount_Short_E"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
+
+	"$envmap"					"env_cubemap"
+	"$envmapfresnel"			".5"
+	"$envmaptint"				"[ .3 .3 .3 ]"
+
+	"$phong"					"1"
+	"$phongboost"				"15"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongalbedotint" 			"1"
+
+	"$rimlight"					"1"
+	"$rimlightexponent"			"33"
+	"$rimlightboost"			"5"
+	"$rimmask"					"1"
+}
+//Material setup by ShadowRUN 幸運な. 
+//You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.

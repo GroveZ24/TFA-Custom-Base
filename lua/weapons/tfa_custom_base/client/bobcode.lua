@@ -177,7 +177,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 		return LerpUnclamped(math.ease.InElastic(fraction), from, to)
 	end
 
-	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.66)
+	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.5)
 	local AnimSmoothing = 20
 	local Mul2 = 1.75
 
