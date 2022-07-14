@@ -1,3 +1,5 @@
+--Made by Stalol. Please do not distribute without his explicit permission, don't be an asshole
+
 local basevec = Vector(1, 1, 1)
 local resvar = "$envmaptint"
 
