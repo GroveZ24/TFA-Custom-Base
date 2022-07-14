@@ -13,8 +13,8 @@ Custom TFA Sub-base with new features and attachments
 - Highly customizable magazine drop on reloads
 
 ### Work in progress features list:
-- Free look 
-- Free aim, free sway
+- ~~Free look~~
+- ~~Free aim, free sway~~
 - IR laser
 - Hybrid sights
 - And more
@@ -24,6 +24,7 @@ Custom TFA Sub-base with new features and attachments
 - Materials: ShadowRUN
 - Particles: FAS2 Team, AyyKyu
 - Sounds: Infinity Ward, Massive Entertainment, Navaro, Battlestate Games
+- ENVmap matproxy: Stalol
 - lua, rigging, compile: Me
 
 This base will be constantly updated in the future, features list is not final
