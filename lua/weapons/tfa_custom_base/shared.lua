@@ -295,6 +295,18 @@ function SWEP:SightsPoseParameter()
 	end
 end
 
+----[[EMPTY POSE PARAMETER]]----
+
+function SWEP:EmptyPoseParameter()
+	if self:Clip1() > 0 then
+		self.OwnerViewModel:SetPoseParameter("empty", 0)
+	else
+		self.OwnerViewModel:SetPoseParameter("empty", 1)
+	end
+	
+	self.OwnerViewModel:InvalidateBoneCache()
+end
+
 ----[[STAT CACHE BLACKLIST]]----
 
 SWEP.StatCache_Blacklist = {
@@ -311,6 +323,7 @@ SWEP.StatCache_Blacklist = {
 function SWEP:Think(...)
 	if CLIENT then
 		self:SightsPoseParameter()
+		self:EmptyPoseParameter()
 	end
 
 	return BaseClass.Think(self, ...)
