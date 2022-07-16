@@ -35,7 +35,7 @@ ATTACHMENT.DetachSound = "TFA_GROVEZ.SHARED.MENU_MOD_DESELECT"
 
 function ATTACHMENT:Attach(wep)
 	wep.FlashlightDotMaterial = nil
-	wep.FlashlightDotMaterial = Material("effects/tfa_grovez/flashlight_15")
+	wep.FlashlightDotMaterial = Material("effects/tfa_grovez/flashlight_16")
 
 	wep.ViewModelBoneMods["tag_flashlight_lightsource"].pos = wep.FlashlightLightsourcePos_APLc
 	wep.ViewModelBoneMods["tag_flashlight_lightsource"].angle = wep.FlashlightLightsourceAng_APLc
