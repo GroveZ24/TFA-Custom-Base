@@ -270,7 +270,7 @@ if SERVER then
 	hook.Add("PlayerSwitchFlashlight", "TFA_Mod_Switch_Anim", function(plyv, toEnable)
 		local wepv = plyv:GetActiveWeapon()
 
-		if wepv.HasFlashlight == false then return end
+		if wepv.HasFlashlight == false then return false end
 
 		if wepv.UseModSwitchProceduralAnimation then
 			net.Start("TFA_ModSwitch")
