@@ -82,6 +82,20 @@ local JumpingFractionAngRiLerp = 0
 local JumpingFractionAngUpLerp = 0
 local JumpingFractionAngFwLerp = 0
 
+local DoSwitchAnim = false
+local SwitchFractionPosRi = 0
+local SwitchFractionPosFw = 0
+local SwitchFractionPosUp = 0
+local SwitchFractionAngRi = 0
+local SwitchFractionAngUp = 0
+local SwitchFractionAngFw = 0
+local SwitchFractionPosRiLerp = 0
+local SwitchFractionPosFwLerp = 0
+local SwitchFractionPosUpLerp = 0
+local SwitchFractionAngRiLerp = 0
+local SwitchFractionAngUpLerp = 0
+local SwitchFractionAngFwLerp = 0
+
 function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local self2 = self:GetTable()
 	if not self2.OwnerIsValid(self) then return end
@@ -192,40 +206,25 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	end)
 
 	if HasLanded then
-		LandingFractionPosRi = 1
-		LandingFractionPosFw = 1
 		LandingFractionPosUp = 1
 		LandingFractionAngRi = 1
-		LandingFractionAngUp = 1
 		LandingFractionAngFw = 1
 	end
 
-	LandingFractionPosRi = math.Approach(LandingFractionPosRi, 0, delta * 0)
-	LandingFractionPosFw = math.Approach(LandingFractionPosFw, 0, delta * 0)
 	LandingFractionPosUp = math.Approach(LandingFractionPosUp, 0, delta * 0.75)
 	LandingFractionAngRi = math.Approach(LandingFractionAngRi, 0, delta * 0.5)
-	LandingFractionAngUp = math.Approach(LandingFractionAngUp, 0, delta * 0)
 	LandingFractionAngFw = math.Approach(LandingFractionAngFw, 0, delta * 1.5)
 
-	local LandingPosRi = InElasticEasedLerp(LandingFractionPosRi, 0, 2)
-	local LandingPosFw = InElasticEasedLerp(LandingFractionPosFw, 0, 2)
 	local LandingPosUp = InElasticEasedLerp(LandingFractionPosUp, 0, 2)
 	local LandingAngRi = InElasticEasedLerp(LandingFractionAngRi, 0, 2)
-	local LandingAngUp = InElasticEasedLerp(LandingFractionAngUp, 0, 2)
 	local LandingAngFw = InElasticEasedLerp(LandingFractionAngFw, 0, 2)
 
-	LandingFractionPosRiLerp = Lerp(delta * AnimSmoothing, LandingFractionPosRiLerp, LandingAngUp * JumpADSMul * 0)
-	LandingFractionPosFwLerp = Lerp(delta * AnimSmoothing, LandingFractionPosFwLerp, LandingAngUp * JumpADSMul * 0)
 	LandingFractionPosUpLerp = Lerp(delta * AnimSmoothing, LandingFractionPosUpLerp, LandingPosUp * JumpADSMul * -0.4)
 	LandingFractionAngRiLerp = Lerp(delta * AnimSmoothing, LandingFractionAngRiLerp, LandingAngRi * JumpADSMul * -3)
-	LandingFractionAngUpLerp = Lerp(delta * AnimSmoothing, LandingFractionAngUpLerp, LandingAngUp * JumpADSMul * 0)
 	LandingFractionAngFwLerp = Lerp(delta * AnimSmoothing, LandingFractionAngFwLerp, LandingAngFw * JumpADSMul * 1.5)
 
-	pos:Add(ri * LandingFractionPosRiLerp * Mul2)
-	pos:Add(fw * LandingFractionPosFwLerp * Mul2)
 	pos:Add(up * LandingFractionPosUpLerp * Mul2)
 	ang:RotateAroundAxis(ri, LandingFractionAngRiLerp * Mul2)
-	ang:RotateAroundAxis(up, LandingFractionAngUpLerp * Mul2)
 	ang:RotateAroundAxis(fw, LandingFractionAngFwLerp * Mul2)
 
 	----[[JUMPING]]----
@@ -239,43 +238,79 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	end)
 
 	if HasJumped then
-		JumpingFractionPosRi = 1
-		JumpingFractionPosFw = 1
 		JumpingFractionPosUp = 1
 		JumpingFractionAngRi = 1
-		JumpingFractionAngUp = 1
 		JumpingFractionAngFw = 1
 	end
 
-	JumpingFractionPosRi = math.Approach(JumpingFractionPosRi, 0, delta * 0)
-	JumpingFractionPosFw = math.Approach(JumpingFractionPosFw, 0, delta * 0)
 	JumpingFractionPosUp = math.Approach(JumpingFractionPosUp, 0, delta * 0.75)
 	JumpingFractionAngRi = math.Approach(JumpingFractionAngRi, 0, delta * 0.5)
-	JumpingFractionAngUp = math.Approach(JumpingFractionAngUp, 0, delta * 0)
 	JumpingFractionAngFw = math.Approach(JumpingFractionAngFw, 0, delta * 2)
 
-	local JumpingPosRi = InElasticEasedLerp(JumpingFractionPosRi, 0, 2)
-	local JumpingPosFw = InElasticEasedLerp(JumpingFractionPosFw, 0, 2)
 	local JumpingPosUp = InElasticEasedLerp(JumpingFractionPosUp, 0, 2)
 	local JumpingAngRi = InElasticEasedLerp(JumpingFractionAngRi, 0, 2)
-	local JumpingAngUp = InElasticEasedLerp(JumpingFractionAngUp, 0, 2)
 	local JumpingAngFw = InElasticEasedLerp(JumpingFractionAngFw, 0, 2)
 
-	JumpingFractionPosRiLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosRiLerp, JumpingPosRi * JumpADSMul * 0)
-	JumpingFractionPosFwLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosFwLerp, JumpingPosRi * JumpADSMul * 0)
 	JumpingFractionPosUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosUpLerp, JumpingPosUp * JumpADSMul * -0.75)
 	JumpingFractionAngRiLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngRiLerp, JumpingAngRi * JumpADSMul * -5)
-	JumpingFractionAngUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngUpLerp, JumpingPosRi * JumpADSMul * 0)
 	JumpingFractionAngFwLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngFwLerp, JumpingAngFw * JumpADSMul * -1.5)
 
-	pos:Add(ri * JumpingFractionPosRiLerp * Mul2)
-	pos:Add(fw * JumpingFractionPosFwLerp * Mul2)
 	pos:Add(up * JumpingFractionPosUpLerp * Mul2)
 	ang:RotateAroundAxis(ri, JumpingFractionAngRiLerp * Mul2)
-	ang:RotateAroundAxis(up, JumpingFractionAngUpLerp * Mul2)
-	ang:RotateAroundAxis(fw, JumpingFractionAngFwLerp * Mul2)	
+	ang:RotateAroundAxis(fw, JumpingFractionAngFwLerp * Mul2)
 
 	--Literally how I code this shit instead of sleeping (2 days well spent): https://sun9-42.userapi.com/s/v1/ig2/heCs_HZhZOlOrvZY0RQdM6M7jbwxt5HSKaXs4N28AsDRi2H5VcSwP-Y8b1QSpFWxHEmjbBv9MF0J8hxUza59X9yD.jpg?size=827x639&quality=96&type=album
+	
+	----[[MOD SWITCH]]----
+
+	local function OutBackEasedLerp(fraction, from, to)
+		return LerpUnclamped(math.ease.OutBack(fraction), from, to)
+	end
+
+	net.Receive("TFA_ModSwitch", function(len, ply)
+		DoSwitchAnim = true
+
+		timer.Simple(0.001, function()
+			DoSwitchAnim = false
+		end)
+	end)
+
+	if DoSwitchAnim then
+		SwitchFractionPosRi = 1
+		SwitchFractionPosFw = 1
+		SwitchFractionPosUp = 1
+		SwitchFractionAngRi = 1
+		SwitchFractionAngUp = 1
+		SwitchFractionAngFw = 1
+	end
+
+	SwitchFractionPosRi = math.Approach(SwitchFractionPosRi, 0, delta * 3)
+	SwitchFractionPosFw = math.Approach(SwitchFractionPosFw, 0, delta * 0.8)
+	SwitchFractionPosUp = math.Approach(SwitchFractionPosUp, 0, delta * 3)
+	SwitchFractionAngRi = math.Approach(SwitchFractionAngRi, 0, delta * 0.6)
+	SwitchFractionAngUp = math.Approach(SwitchFractionAngUp, 0, delta * 3)
+	SwitchFractionAngFw = math.Approach(SwitchFractionAngFw, 0, delta * 1)
+
+	local SwitchPosRi = OutBackEasedLerp(SwitchFractionPosRi, 0, 2)
+	local SwitchPosFw = InElasticEasedLerp(SwitchFractionPosFw, 0, 2)
+	local SwitchPosUp = OutBackEasedLerp(SwitchFractionPosUp, 0, 2)
+	local SwitchAngRi = InElasticEasedLerp(SwitchFractionAngRi, 0, 2)
+	local SwitchAngUp = OutBackEasedLerp(SwitchFractionAngUp, 0, 2)
+	local SwitchAngFw = InElasticEasedLerp(SwitchFractionAngFw, 0, 2)
+
+	SwitchFractionPosRiLerp = Lerp(delta * AnimSmoothing, SwitchFractionPosRiLerp, SwitchPosRi * 1)
+	SwitchFractionPosFwLerp = Lerp(delta * AnimSmoothing, SwitchFractionPosFwLerp, SwitchPosFw * 1)
+	SwitchFractionPosUpLerp = Lerp(delta * AnimSmoothing, SwitchFractionPosUpLerp, SwitchPosUp * 1)
+	SwitchFractionAngRiLerp = Lerp(delta * AnimSmoothing, SwitchFractionAngRiLerp, SwitchAngRi * 1)
+	SwitchFractionAngUpLerp = Lerp(delta * AnimSmoothing, SwitchFractionAngUpLerp, SwitchAngUp * 1)
+	SwitchFractionAngFwLerp = Lerp(delta * AnimSmoothing, SwitchFractionAngFwLerp, SwitchAngFw * 1)
+
+	pos:Add(ri * SwitchFractionPosRiLerp * 0.125)
+	pos:Add(fw * SwitchFractionPosFwLerp * 0.15)
+	pos:Add(up * SwitchFractionPosUpLerp * 0.05)
+	ang:RotateAroundAxis(ri, SwitchFractionAngRiLerp * -0.5)
+	ang:RotateAroundAxis(up, SwitchFractionAngUpLerp * -0.25)
+	ang:RotateAroundAxis(fw, SwitchFractionAngFwLerp * 4)
 
 	----[[ROLLING WITH HORIZONTAL MOTION]]----
 	local xVelocityClamped = xVelocitySmooth

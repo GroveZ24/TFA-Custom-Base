@@ -22,7 +22,6 @@ ATTACHMENT.WeaponTable = {
 	},
 	["Ergonomics"] = function(wep, val) return val - 1 end,
 	["Weight"] = function(wep, val) return val + 0.116 end,
-	["HasFlashlight"] = true,
 	["FlashlightAttachment"] = 5,
 	["FlashlightDistance"] = 175 * (3.28084 * 16),
 	["FlashlightBrightness"] = 500 * 0.01,
@@ -35,6 +34,8 @@ ATTACHMENT.AttachSound = "TFA_GROVEZ.SHARED.MENU_MOD_SELECT"
 ATTACHMENT.DetachSound = "TFA_GROVEZ.SHARED.MENU_MOD_DESELECT"
 
 function ATTACHMENT:Attach(wep)
+	wep.HasFlashlight = true
+
 	wep.FlashlightDotMaterial = nil
 	wep.FlashlightDotMaterial = Material("effects/tfa_grovez/flashlight_10")
 
@@ -49,6 +50,8 @@ function ATTACHMENT:Attach(wep)
 end
 
 function ATTACHMENT:Detach(wep)
+	wep.HasFlashlight = false
+
 	wep.FlashlightDotMaterial = nil
 	wep.FlashlightDotMaterial = Material("effects/flashlight001")
 

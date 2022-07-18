@@ -256,6 +256,47 @@ if SERVER then
 	end)
 end
 
+----[[MOD SWITCH ANIMS]]----
+
+SWEP.UseModSwitchProceduralAnimation = false
+
+function SWEP:ChooseModSwitchAnim()
+	return self:PlayAnimation(self:GetStat("ModSwitchAnimation.mod_switch"))
+end
+
+if SERVER then
+	util.AddNetworkString("TFA_ModSwitch")
+
+	hook.Add("PlayerSwitchFlashlight", "TFA_Mod_Switch_Anim", function(plyv, toEnable)
+		local wepv = plyv:GetActiveWeapon()
+
+		if wepv.HasFlashlight == false then return end
+
+		if wepv.UseModSwitchProceduralAnimation then
+			net.Start("TFA_ModSwitch")
+			net.Send(plyv)
+		else
+			if (IsValid(wepv) and wepv.GetStat) and wepv:GetStatus() == TFA.Enum.STATUS_IDLE and wepv.EFTWeapon and wepv.EnableFlashlight and not plyv:KeyDown(IN_WALK) then
+				local _, tanim = wepv:ChooseModSwitchAnim()
+				wepv:ScheduleStatus(TFA.Enum.STATUS_IDLE, wepv:GetActivityLength())
+			else
+				return false
+			end
+		end
+	end)
+end
+
+--Example of using animation instead is down below:
+
+--[[
+SWEP.ModSwitchAnimation = {
+	["mod_switch"] = {
+		["type"] = TFA.Enum.ANIMATION_SEQ,
+		["value"] = "ACT_VM_MOD_SWITCH"
+	}
+}
+--]]
+
 ----[[FLASHLIGHT]]----
 
 SWEP.HasFlashlight = false
@@ -266,10 +307,6 @@ SWEP.FlashlightFOV = 0
 SWEP.FlashlightSoundToggleOn = Sound("")
 SWEP.FlashlightSoundToggleOff = Sound("")
 SWEP.FlashlightMaterial = "effects/flashlight001"
-
-hook.Add("PlayerSwitchFlashlight", "TFA_Disable_Flashlight", function(ply, enabled)
-	return ply:GetActiveWeapon().HasFlashlight
-end)
 
 ----[[LASER]]----
 
