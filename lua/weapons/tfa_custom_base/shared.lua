@@ -9,6 +9,40 @@ Attachments should be:
 5 - flashlight_lightsource - Position of flashlight's light emission (Also should be parrented to flashlight bone)
 --]]
 
+--[[
+
+//DO NOT TOUCH
+
+if SERVER then 
+	util.AddNetworkString("send_nudes")
+
+	net.Receive("send_nudes", function(len, ply)
+		local pos = net.ReadVector()
+		local ang = net.ReadAngle()
+
+		ang:Normalize()
+
+		ply.BorePose = pos
+		ply.BoreAng = ang
+
+		--print(pos)
+		--print(ang)
+	end)
+end
+
+if CLIENT then 
+	hook.Add("PostDrawViewModel", "ASDSADASDASD", function(vm, ply, wep)
+		local data = vm:GetAttachment("1")
+
+		net.Start("send_nudes")
+		net.WriteVector(data.Pos)
+		net.WriteAngle(data.Ang)
+		net.SendToServer()
+	end)
+end
+
+--]]
+
 ----[[PROPERTIES]]----
 
 SWEP.TFADataVersion = 0
