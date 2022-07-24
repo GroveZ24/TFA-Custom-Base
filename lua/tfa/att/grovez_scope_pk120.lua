@@ -7,7 +7,7 @@ ATTACHMENT.ShortName = "ПК120"
 ATTACHMENT.Icon = "entities/grovez_scope_pk120.png"
 ATTACHMENT.Description = {
 	Color(50, 255, 50), "[+] Zoom: +5%",
-	Color(255, 50, 50), "[-] Ergonomics: -4",
+	Color(255, 50, 50), "[-] Ergonomics: -6",
 	Color(255, 255, 255), "[=] Weight: +0.298"
 }
 
@@ -28,7 +28,7 @@ ATTACHMENT.WeaponTable = {
 			return val * 0.95
 		end
 	},
-	["Ergonomics"] = function(wep, val) return val - 4 end,
+	["Ergonomics"] = function(wep, val) return val - 6 end,
 	["Weight"] = function(wep, val) return val + 0.298 end,
 	["ScopeVElement"] = "scope_pk120",
 	["Reticle"] = "models/weapons/tfa_grovez/mods/scopes/scope_pk120/PK120_Reticle"

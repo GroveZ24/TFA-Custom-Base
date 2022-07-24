@@ -388,7 +388,12 @@ SWEP.StatCache_Blacklist = {
 	["Ergonomics"] = true,
 	["Weight"] = true,
 	["VElements"] = true,
-	["ViewModelBoneMods"] = true
+	["ViewModelBoneMods"] = true,
+	["Primary_TFA"] = {
+		["SpreadMultiplierMax"] = true,
+		["SpreadIncrement"] = true,
+		["SpreadRecovery"] = true,
+	},
 }
 
 ----[[THINK]]----
@@ -404,16 +409,30 @@ end
 
 ----[[THINK2: ELECTRIC BOOGALOO]]----
 
+SWEP.UseCustomSpreadCalculationAlgorithm = false
+
 function SWEP:Think2(...)
 	self.IronSightTime = (1.5 - (self:GetStat("Ergonomics") * 0.01)) * 0.4
 	self.MoveSpeed = 1 - ((self:GetStat("Weight") * 0.01) * 0.25)
 
-	if CLIENT then
-		--print("Ergonomics: " .. self:GetStat("Ergonomics"))
-		--print("Weight: " .. self:GetStat("Weight"))
+	if self.UseCustomSpreadCalculationAlgorithm then
+		self.Primary_TFA.SpreadMultiplierMax = self:GetStat("Primary_TFA.SpreadMultiplierMaxCustom") + (self.IronSightsProgress * (self:GetStat("Primary_TFA.Spread") / self:GetStat("Primary_TFA.IronAccuracy")) * 1)
+		self.Primary_TFA.SpreadIncrement = self:GetStat("Primary_TFA.SpreadIncrementCustom") + (self.IronSightsProgress * (self:GetStat("Primary_TFA.Spread") / self:GetStat("Primary_TFA.IronAccuracy")) * 0.25)
+		self.Primary_TFA.SpreadRecovery = self:GetStat("Primary_TFA.SpreadRecoveryCustom") + (self.IronSightsProgress * (self:GetStat("Primary_TFA.Spread") / self:GetStat("Primary_TFA.IronAccuracy")) * 2)
 	end
+
+	--Modern problems require modern solutions
+	--At least it works the way I wanted it to
+	--https://sun9-64.userapi.com/impg/VggW6BSJkUhFOqjjQZbQz_BI-l_Kdw2tY-7Pbw/TITOIqRYfiI.jpg?size=355x355&quality=96&sign=9da6e4528d986fb40880c847e115fd45&type=album
+
+	if CLIENT then
+	--[[
+		print("Ergonomics: " .. self:GetStat("Ergonomics"))
+		print("Weight: " .. self:GetStat("Weight"))
+	--]]
+	end
+
+	--https://sun9-85.userapi.com/s/v1/ig2/n_WKNsnSh8wVwBFfDfMJrV6wOM1jj2VRLFWnQ_2YkHz2F2bZYe7rqE9aiY8lr56wV7sf0EmzV2I8SE8Nl8bKAbfc.jpg?size=800x450&quality=96&type=album
 
 	return BaseClass.Think2(self, ...)
 end
-
---https://sun9-85.userapi.com/s/v1/ig2/n_WKNsnSh8wVwBFfDfMJrV6wOM1jj2VRLFWnQ_2YkHz2F2bZYe7rqE9aiY8lr56wV7sf0EmzV2I8SE8Nl8bKAbfc.jpg?size=800x450&quality=96&type=album

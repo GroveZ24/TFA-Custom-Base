@@ -9,7 +9,7 @@ ATTACHMENT.Description = {
 	Color(255, 255, 50), "[+] Flashlight output: 500",
 	Color(255, 255, 50), "[+] Flashlight distance: 315",
 	Color(255, 255, 50), "[+] Flashlight beam intensity: 7500",
-	Color(255, 50, 50), "[-] Ergonomics: -0.5",
+	Color(255, 50, 50), "[-] Ergonomics: -2",
 	Color(255, 255, 255), "[=] Weight: +0.083"
 }
 
@@ -19,7 +19,7 @@ ATTACHMENT.WeaponTable = {
 			["active"] = true
 		}
 	},
-	["Ergonomics"] = function(wep, val) return val - 0.5 end,
+	["Ergonomics"] = function(wep, val) return val - 2 end,
 	["Weight"] = function(wep, val) return val + 0.083 end,
 	["FlashlightAttachment"] = 5,
 	["FlashlightDistance"] = 315 * (3.28084 * 16),
