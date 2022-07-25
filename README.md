@@ -2,7 +2,7 @@
 Custom TFA Sub-base with new features and attachments
 
 ### Requirements:
-- [TFA Base](https://steamcommunity.com/workshop/filedetails/?id=415143062 "Click me")
+- [TFA Base](https://steamcommunity.com/sharedfiles/filedetails/?id=2840031720 "Click me")
 - [TFA INS2 Shared Parts](https://steamcommunity.com/workshop/filedetails/?id=866368346 "Click me")
 
 ### Current features list:
