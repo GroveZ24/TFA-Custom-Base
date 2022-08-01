@@ -1,0 +1,35 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\mods\tactical\laser_zenitco_perst4\Perst4_D"
+	"$bumpmap"					"models\weapons\tfa_grovez\mods\tactical\laser_zenitco_perst4\Perst4_N"
+	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\tactical\laser_zenitco_perst4\Perst4_E"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
+	"$color2"					"[0.35 0.35 0.35]"
+	"$blendTintByBaseAlpha"		"1"
+
+	"$envmap"					"cubemaps\fo4_dith"
+	"$envmapfresnel"			".5"
+	"$envmaptint"				"[2 2 2]"
+	"$envmapcoefficient"		"[2 2 2]"
+
+	"$phong"					"1"
+	"$phongboost"				"15"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongalbedotint" 			"1"
+
+	"$rimlight"					"1"
+	"$rimlightexponent"			"33"
+	"$rimlightboost"			"5"
+	"$rimmask"					"1"
+
+	Proxies
+	{
+		TFACubemapMultiplier
+		{
+			multiplier	$envmapcoefficient
+			resultvar	$envmaptint
+		}
+	}
+}
+//Material setup by ShadowRUN 幸運な. 
+//Do NOT edit\modify\redistribute these materials without my explicit permission.
