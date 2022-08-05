@@ -25,6 +25,7 @@ $texturegroup skin
 $surfaceprop "default"
 $contents "solid"
 $illumposition 0 0 0
+$mostlyopaque
 
 //CDMATERIALS
 $cdmaterials "models/weapons/tfa_grovez/mods/tactical/flashlight_surefire_m300c/"

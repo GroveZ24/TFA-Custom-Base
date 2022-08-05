@@ -7,9 +7,9 @@
 	"$color2"					"[0.5 0.5 0.5]"
 	"$blendTintByBaseAlpha"		"1"
 
-	"$envmap"					"env_cubemap"
+	"$envmap"					"cubemaps\fo4_dith"
 	"$envmapfresnel"			".25"
-	"$envmaptint"				"[ .13 .13 .13 ]"
+	"$envmapcoefficient"		"[0.39 0.39 0.39]"
 
 	"$phong"					"1"
 	"$phongboost"				"15"
@@ -20,6 +20,15 @@
 	"$rimlightexponent"			"33"
 	"$rimlightboost"			"2"
 	"$rimmask"					"1"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier	$envmapcoefficient
+			resultvar	$envmaptint
+		}
+	}
 }
 //Material setup by ShadowRUN 幸運な. 
 //You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.

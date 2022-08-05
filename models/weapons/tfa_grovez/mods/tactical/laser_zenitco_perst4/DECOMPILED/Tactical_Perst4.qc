@@ -13,9 +13,9 @@ $model "Tactical" "Tactical.smd"
 //BODYGROUPS
 $bodygroup "Mode"
 {
-	studio "Tactical_OFF.smd" // OFF
-	studio "Tactical_V.smd" // VISIBLE LASER
-	studio "Tactical_IR.smd" // IR LASER
+	studio "Tactical_OFF.smd"
+	studio "Tactical_V.smd"
+	studio "Tactical_IR.smd"
 }
 
 //ZALOOPA

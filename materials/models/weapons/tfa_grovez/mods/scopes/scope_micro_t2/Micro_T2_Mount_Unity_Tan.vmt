@@ -4,11 +4,11 @@
 	"$bumpmap"					"models\weapons\tfa_grovez\mods\scopes\scope_micro_t2\Micro_T2_Mount_Unity_Tan_N"
 	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\scopes\scope_micro_t2\Micro_T2_Mount_Unity_Tan_E"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
-	"$color2"					"[0.75 0.75 0.75]"
+	"$color2"					"[0.8 0.8 0.8]"
 
-	"$envmap"					"env_cubemap"
+	"$envmap"					"cubemaps\fo4_dith"
 	"$envmapfresnel"			".5"
-	"$envmaptint"				"[ .3 .3 .3 ]"
+	"$envmapcoefficient"		"[0.9 0.9 0.9]"
 
 	"$phong"					"1"
 	"$phongboost"				"30"
@@ -19,6 +19,15 @@
 	"$rimlightexponent"			"33"
 	"$rimlightboost"			"5"
 	"$rimmask"					"1"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+	}
 }
 //Material setup by ShadowRUN 幸運な. 
 //You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.

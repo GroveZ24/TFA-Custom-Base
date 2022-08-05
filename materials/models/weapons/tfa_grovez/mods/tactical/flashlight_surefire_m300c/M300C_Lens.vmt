@@ -5,14 +5,24 @@
 	"$color2"					"[0.1 0.1 0.1]"
 	"$additive"					"1"
 
-	"$envmap"					"env_cubemap"
+	"$envmap"					"cubemaps\fo4_dith"
 	"$envmapfresnel"			"1"
+	"$envmapcoefficient"		"[3 3 3]"
 
 	"$phong"					"1"
 	"$phongexponent"			"3000"
 	"$phongboost"				"5"
 	"$phongfresnelranges"		"[0.25 0.5 1]"
 	"$basemapalphaphongmask"	"1"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+	}
 }
 //Material setup by ShadowRUN 幸運な. 
 //You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.

@@ -1,0 +1,27 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\mods\tactical\flashlight_inforce_aplc\APLc_D"
+	"$bumpmap"					"models\weapons\tfa_grovez\mods\tactical\flashlight_inforce_aplc\APLc_N"
+	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\tactical\flashlight_inforce_aplc\APLc_E"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
+	"$color2"					"[0.65 0.65 0.65]"
+
+	"$envmap"					"cubemaps\fo4_dith"
+	"$envmapcoefficient"		"[1.5 1.5 1.5]"
+
+	"$phong"					"1"
+	"$phongboost"				"15"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongalbedotint" 			"1"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+	}
+}
+//Material setup by ShadowRUN 幸運な. 
+//You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.

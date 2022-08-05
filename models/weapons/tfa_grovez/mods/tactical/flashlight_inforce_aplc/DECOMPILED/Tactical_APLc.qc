@@ -5,7 +5,7 @@ $scale 37.5
 //$origin 0 0 0 0
 
 //MODELNAME
-$modelname "weapons\tfa_grovez\mods\tactical\flashlight_inforce_wild1\tactical.mdl"
+$modelname "weapons\tfa_grovez\mods\tactical\flashlight_inforce_aplc\tactical.mdl"
 
 //MODEL
 $model "Tactical" "Tactical.smd"
@@ -17,7 +17,7 @@ $illumposition 0 0 0
 $mostlyopaque
 
 //CDMATERIALS
-$cdmaterials "models/weapons/tfa_grovez/mods/tactical/flashlight_inforce_wild1/"
+$cdmaterials "models/weapons/tfa_grovez/mods/tactical/flashlight_inforce_aplc/"
 
 //ATTACHMENTS
 $attachment "tactical" "mod_tactical" 0 0 0 rotate 0 0 0

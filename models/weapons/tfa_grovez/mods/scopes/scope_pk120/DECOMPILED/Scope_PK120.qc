@@ -14,6 +14,7 @@ $model "Scope" "Scope.smd"
 $surfaceprop "default"
 $contents "solid"
 $illumposition 0 0 0
+$mostlyopaque
 
 //CDMATERIALS
 $cdmaterials "models/weapons/tfa_grovez/mods/scopes/scope_pk120/"

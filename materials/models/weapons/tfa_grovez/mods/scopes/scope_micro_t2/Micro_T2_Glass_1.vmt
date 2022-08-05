@@ -1,0 +1,28 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\scope_micro_t2\Micro_T2_D"
+	"$bumpmap"					"dev\bump_normal"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
+	"$translucent"				"1"
+
+	"$envmap"					"cubemaps\hdri_parking"
+	"$envmapfresnel"			"1"
+	"$envmapcoefficient"		"[15 3 0]"
+
+	"$phong"					"1"
+	"$phongexponent"			"50"
+	"$phongboost"				"10"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongtint"				"[1 1 0]"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+	}
+}
+//Material setup by ShadowRUN 幸運な. 
+//Do NOT edit\modify\redistribute these materials without my explicit permission.

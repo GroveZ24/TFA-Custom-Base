@@ -1,30 +1,32 @@
-"VertexLitGeneric"
+"VertexlitGeneric"
 {
-	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\scope_uh1_gen2\UH1_Glass_D"
+	"$basetexture"				"models\weapons\tfa_grovez\alpha_50"
 	"$bumpmap"					"dev\bump_normal"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
-//	"$color2"					"[0.5 0.5 0.5]"
 	"$translucent"				"1"
-	"$nocull"					"1"
 
-	"$envmap"					"env_cubemap"
+	"$envmap"					"cubemaps\fo4_dith"
 	"$envmapfresnel"			"0.25"
-	"$envmaptint"				"[0.1 0.1 0.1]"
-//	"$normalmapalphaenvmapmask"	"1"
+	"$envmapcoefficient"		"[0.6 1 1]"
 
 	"$phong"					"1"
-	"$phongexponent"			"900"
-	"$phongboost"				"1"
+	"$phongexponent"			"300"
+	"$phongboost"				"0.75"
 	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongtint"				"[0.15 0.5 1.0]"
 
 	"Proxies"
 	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
 		"TFA_INS2_IronsightVectorResult"
 		{
-			"resultVar"			"$envmaptint"
-			"ResultDefault"		"0.3 0.3 0.3"
-			"ResultZoomed"		"0.15 0.15 0.15"
-
+			"resultVar"			"$envmapfresnel"
+			"ResultDefault"		"0.25"
+			"ResultZoomed"		"2.5"
 		}
 	}
 }

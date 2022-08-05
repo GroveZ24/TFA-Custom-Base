@@ -2,11 +2,11 @@ if not ATTACHMENT then
 	ATTACHMENT = {}
 end
 
-ATTACHMENT.Name = "Inforce WILD1 Weapon Integrated Lighting Device"
+ATTACHMENT.Name = "Inforce APLc"
 ATTACHMENT.ShortName = "APLc"
-ATTACHMENT.Icon = "entities/grovez_flashlight_inforce_wild1.png"
+ATTACHMENT.Icon = "entities/grovez_flashlight_inforce_aplc.png"
 ATTACHMENT.Description = {
-	Color(255, 255, 50), "[+] Flashlight output: 500",
+	Color(255, 255, 50), "[+] Flashlight output: 200",
 	Color(255, 255, 50), "[+] Flashlight distance: 315",
 	Color(255, 255, 50), "[+] Flashlight beam intensity: 7500",
 	Color(255, 50, 50), "[-] Ergonomics: -2",
@@ -23,7 +23,7 @@ ATTACHMENT.WeaponTable = {
 	["Weight"] = function(wep, val) return val + 0.083 end,
 	["FlashlightAttachment"] = 5,
 	["FlashlightDistance"] = 315 * (3.28084 * 16),
-	["FlashlightBrightness"] = 500 * 0.01,
+	["FlashlightBrightness"] = 200 * 0.01,
 	["FlashlightFOV"] = 7500 * 0.015,
 	["FlashlightSoundToggleOn"] = Sound("TFA_GROVEZ.SHARED.FLASHLIGHT"),
 	["FlashlightSoundToggleOff"] = Sound("TFA_GROVEZ.SHARED.FLASHLIGHT")

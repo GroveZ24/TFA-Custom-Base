@@ -5,9 +5,9 @@
 	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\tactical\flashlight_surefire_m300c\M300C_E"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
 
-	"$envmap"					"env_cubemap"
+	"$envmap"					"cubemaps\fo4_dith"
 	"$envmapfresnel"			".25"
-	"$envmaptint"				"[ .3 .3 .3 ]"
+	"$envmapcoefficient"		"[0.9 0.9 0.9]"
 
 	"$phong"					"1"
 	"$phongboost"				"20"
@@ -18,6 +18,15 @@
 	"$rimlightexponent"			"33"
 	"$rimlightboost"			"2"
 	"$rimmask"					"1"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+	}
 }
 //Material setup by ShadowRUN 幸運な. 
 //You are NOT allowed to edit\modify\redistribute these materials without my explicit permission.
