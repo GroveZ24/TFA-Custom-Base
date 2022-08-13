@@ -93,6 +93,34 @@ SWEP.ViewModelPunchYawMultiplier_IronSights = 0
 
 SWEP.ToCrouchTime = 0.35
 
+----[[FOREGRIPS RELATED]]----
+
+SWEP.GripPoseParameterName = "grip_default"
+SWEP.GripChangePoseSpeed = 10
+SWEP.GripFactor = 0
+
+function SWEP:TFAEnableForegrip()
+	self.GripFactor = 1
+end
+
+function SWEP:TFADisableForegrip()
+	self.GripFactor = 0
+end
+
+local GripProgress = 0
+
+function SWEP:GripPoseParameter()
+	local VM = LocalPlayer():GetViewModel() or NULL
+	local GripFactor = self.GripFactor
+
+	GripProgress = Lerp(FrameTime() * LocalPlayer():GetActiveWeapon().GripChangePoseSpeed, GripProgress, GripFactor)
+
+	if VM:IsValid() then
+		self.OwnerViewModel:SetPoseParameter(LocalPlayer():GetActiveWeapon().GripPoseParameterName, GripProgress)
+		self.OwnerViewModel:InvalidateBoneCache()
+	end
+end
+
 ----[[EVENT TABLE: MAG DISCARD]]----
 
 function SWEP:TFAMagDiscard()
@@ -389,6 +417,7 @@ SWEP.StatCache_Blacklist = {
 	["Weight"] = true,
 	["VElements"] = true,
 	["ViewModelBoneMods"] = true,
+	["GripFactor"] = true,
 	["Primary_TFA"] = {
 		["SpreadMultiplierMax"] = true,
 		["SpreadIncrement"] = true,
@@ -402,6 +431,7 @@ function SWEP:Think(...)
 	if CLIENT then
 		self:SightsPoseParameter()
 		self:EmptyPoseParameter()
+		self:GripPoseParameter()
 	end
 
 	return BaseClass.Think(self, ...)

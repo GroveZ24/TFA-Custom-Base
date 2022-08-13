@@ -51,7 +51,7 @@ function SWEP:TFAFinishMove(ply, velocity, movedata)
 	local vellen = velocity:Length2D()
 
 	if sprint_cv:GetBool() and not self:GetStatL("AllowSprintAttack", false) and movedata then
-		self:SetSprinting(vellen > ply:GetRunSpeed() * 0.1 * speedmult and movedata:KeyDown(IN_SPEED) and ply:OnGround()) -- Тут
+		self:SetSprinting(vellen > ply:GetRunSpeed() * 0.3 * speedmult and movedata:KeyDown(IN_SPEED) and ply:OnGround()) -- Тут
 	else
 		self:SetSprinting(false)
 	end
