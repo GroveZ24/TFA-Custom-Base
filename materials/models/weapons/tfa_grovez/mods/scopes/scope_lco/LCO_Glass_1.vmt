@@ -1,0 +1,35 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\alpha_100"
+	"$bumpmap"					"dev\bump_normal"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
+	"$color2"					"[0 0 0]"
+	"$translucent"				"1"
+
+	"$envmap"					"cubemaps\hdri_parking"
+	"$envmapfresnel"			"1"
+	"$envmapcoefficient"		"[1.0 0.25 0.0]"
+
+	"$phong"					"1"
+	"$phongexponent"			"90"
+	"$phongboost"				"10"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongtint"				"[1.0 0.3 0.0]"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+		"TFA_INS2_IronsightVectorResult"
+		{
+			"resultVar"			"$envmapfresnel"
+			"ResultDefault"		"0.25"
+			"ResultZoomed"		"2.5"
+		}
+	}
+}
+//Material setup by ShadowRUN 幸運な. 
+//Do NOT edit\modify\redistribute these materials without my explicit permission.

@@ -1,0 +1,34 @@
+"VertexLitGeneric"
+{
+	"$basetexture"				"models\weapons\tfa_grovez\mods\scopes\scope_lco\LCO_D"
+	"$bumpmap"					"models\weapons\tfa_grovez\mods\scopes\scope_lco\LCO_N"
+	"$phongexponenttexture"		"models\weapons\tfa_grovez\mods\scopes\scope_lco\LCO_E"
+	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal2"
+	"$color2"					"[0.35 0.35 0.35]"
+	"$blendTintByBaseAlpha"		"1"
+
+	"$envmap"					"cubemaps\fo4_dith"
+	"$envmapfresnel"			".5"
+	"$envmapcoefficient"		"[0.5 0.5 0.5]"
+
+	"$phong"					"1"
+	"$phongboost"				"15"
+	"$phongfresnelranges"		"[0.32 0.72 0.99]"
+	"$phongalbedotint" 			"1"
+
+	"$rimlight"					"1"
+	"$rimlightexponent"			"80"
+	"$rimlightboost"			"2"
+	"$rimmask"					"1"
+
+	"Proxies"
+	{
+		TFACubemapMultiplier
+		{
+			multiplier			$envmapcoefficient
+			resultvar			$envmaptint
+		}
+	}
+}
+//Material setup by ShadowRUN 幸運な. 
+//Do NOT edit\modify\redistribute these materials without my explicit permission.
