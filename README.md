@@ -28,3 +28,12 @@ Custom TFA Sub-base with new features and attachments
 - lua, rigging, compile: Me
 
 This base will be constantly updated in the future, features list is not final
+
+
+### License:
+Copyright 2022 GroveZ.
+- Modifications or Redistribution of this content without explicit permission is prohibited.
+- Commercial use of this content is strictly prohibited.
+- Unauthorized redistribution of this content will result in a DMCA.
+
+For further information and permission contact [GroveZ](https://steamcommunity.com/id/GrvZ) or [ShadowRUN](https://steamcommunity.com/id/RshaUdowN) on Steam.
