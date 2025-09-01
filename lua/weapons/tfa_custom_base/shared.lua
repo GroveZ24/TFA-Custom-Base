@@ -369,16 +369,27 @@ SWEP.LaserDistance = 10000
 ----[[FREE VIEWMODEL]]----
 
 local freevm_var = CreateConVar("cl_tfa_debug_freevm", 0, {FCVAR_CLIENTCMD_CAN_EXECUTE, FCVAR_ARCHIVE})
+local freevm_last_state = 0
+local fp, fa -- Position and angle storage
 
 hook.Add("CalcViewModelView", "TFA_Debug_FreeVM", function(w, v, op, oa, p, a)
-	if freevm_var:GetFloat() == 1 then
-		if not fp then
-			fp, fa = Vector(p), Angle(a)
-		end
+    local current_state = freevm_var:GetFloat()
+    
+    -- Reset position when enabling free VM
+    if current_state == 1 and freevm_last_state ~= 1 then
+        fp, fa = Vector(p), Angle(a)
+    end
+    
+    freevm_last_state = current_state
+    
+    if current_state == 1 then
+        if not fp then
+            fp, fa = Vector(p), Angle(a)
+        end
 
-		p:Set(fp)
-		a:Set(fa)
-	end
+        p:Set(fp)
+        a:Set(fa)
+    end
 end)
 
 ----[[C_MENU SOUNDS]]----
