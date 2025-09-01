@@ -466,3 +466,22 @@ function SWEP:Think2(...)
 
 	return BaseClass.Think2(self, ...)
 end
+
+----[[LASTRECOIL TRACKER]]----
+
+timer.Simple(0, function()
+    if not SWEP then return end
+    if not SWEP.Recoil then return end
+
+    local OriginalRecoil = SWEP.Recoil
+
+    function SWEP:Recoil(recoil, ...)
+        self.LastRecoil = tonumber(recoil) or 0
+        return OriginalRecoil(self, recoil, ...)
+    end
+end)
+
+function SWEP:GetLastRecoil()
+    local val = self.LastRecoil or self:GetStatL("Primary.Recoil") or 0
+    return tonumber(val) or 0
+end
