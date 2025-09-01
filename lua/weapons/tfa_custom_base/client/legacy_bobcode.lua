@@ -1,3 +1,4 @@
+[==========[
 local vector_origin = Vector()
 local angle_origin = Angle()
 
@@ -26,7 +27,7 @@ local pist_rate = 3 * rateScaleFac
 local pist_scale = 9
 local rate_clamp = 2 * rateScaleFac
 local walkIntensitySmooth, breathIntensitySmooth = 0, 0
-local walkRate = 125 / 60 * TAU / 1.085 / 2 * rateScaleFac
+local walkRate = 160 / 60 * TAU / 1.085 / 2 * rateScaleFac
 local walkVec = Vector()
 local ownerVelocity, ownerVelocityMod = Vector(), Vector()
 local zVelocity, zVelocitySmooth = 0, 0
@@ -38,7 +39,7 @@ local gunbob_intensity_cvar = GetConVar("cl_tfa_gunbob_intensity")
 local gunbob_intensity = 0
 
 SWEP.WalkPos = Vector(-0.25, -0.75, -0.25)
-SWEP.WalkAng = Angle(0.5, 0, 0)
+SWEP.WalkAng = Angle(1, 2, -3)
 
 SWEP.footstepTotal = 0
 SWEP.footstepTotalTarget = 0
@@ -141,96 +142,37 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 
 	----[[MULTIPLIERS]]----
 	breathIntensity = breathIntensitySmooth * gunbob_intensity * 1.5
-	walkIntensity = walkIntensitySmooth * gunbob_intensity * 1.15* math.abs(1 - self:GetSprintProgress())
+	walkIntensity = walkIntensitySmooth * gunbob_intensity * 1.5 * math.abs(1 - self:GetSprintProgress())
 
 	local breatheMult2 = math.Clamp(self2.IronSightsProgressUnpredicted2 or self:GetIronSightsProgress(), 0, 1)
 	local breatheMult1 = (1 - breatheMult2) - (self:GetInspectingProgress() * 0.75)
 
 	----[[BREATHING]]----
-	local breathMain = math.sin(self2.ti * walkRate * 0.7)  // Основное дыхание
-	local breathSecondary = math.cos(self2.ti * walkRate * 0.35)  // Вторичное дыхание (в 2 раза медленнее)
-
-	pos:Add(riLocal * (breathMain * 0.8 - breathSecondary * 0.4) * flip_v * breathIntensity * breatheMult1 * 0.15)
-	pos:Add(upLocal * (breathMain * 1.2 + breathSecondary * 0.3) * breathIntensity * breatheMult1 * 0.25)
-
-	ang:RotateAroundAxis(ri, breathMain * breathIntensity * breatheMult1 * 1.8)
-	ang:RotateAroundAxis(up, (breathMain * 0.5 - breathSecondary * 0.7) * breathIntensity * breatheMult1 * -0.35)
-	ang:RotateAroundAxis(fw, breathSecondary * breathIntensity * breatheMult1 * -2.2)
-
-	local microBreath = math.sin(self2.ti * walkRate * 2.5) * 0.2
-	ang:RotateAroundAxis(up, microBreath * breathIntensity * breatheMult1 * 0.5)
-	ang:RotateAroundAxis(fw, microBreath * breathIntensity * breatheMult1 * -0.8)
-
-	local breathDamping = 1 - math.Clamp(walkIntensitySmooth * 0.7, 0, 0.6)
-	pos:Add(riLocal * breathMain * flip_v * breathIntensity * breatheMult1 * 0.1 * breathDamping)
-	ang:RotateAroundAxis(ri, breathMain * breathIntensity * breatheMult1 * 1.0 * breathDamping)
+	pos:Add(riLocal * (math.sin(self2.ti * walkRate * 1) - math.cos(self2.ti * walkRate)) * flip_v * breathIntensity * breatheMult1 * 0.1)
+	pos:Add(upLocal * math.sin(self2.ti * walkRate * 1) * breathIntensity * breatheMult1 * 0.2)
+	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate * 1) * breathIntensity * breatheMult1 * 2)
+	ang:RotateAroundAxis(up, (math.sin(self2.ti * walkRate * 0.25) - math.cos(self2.ti * walkRate)) * breathIntensity * breatheMult1 * -0.25)
+	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate * 0.5) * breathIntensity * breatheMult1 * -2)
 
 	----[[ADS WALKING]]----
-	local adsIntensity = breathIntensity * breatheMult2 * 0.95  // -5%
-	local walkSpeedRatio = math.Clamp(self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed(), 0, 0.8)
-
-	pos:Add(riLocal * math.cos(self2.ti * walkRate * 0.475) * adsIntensity * 0.3)       // -5%
-	pos:Add(fwLocal * math.cos(self2.ti * walkRate * 0.95) * adsIntensity * -0.19)      // -5%
-	pos:Add(upLocal * math.sin(self2.ti * walkRate * 0.95) * adsIntensity * 0.19)       // -5%
-
-	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate * 0.95) * adsIntensity * 1.14)   // -5%
-	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate * 0.475) * adsIntensity * -1.71) // -5%
-	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate * 0.475) * adsIntensity * 2.66)  // -5%
-
-	local smoothHoriz = l_Lerp(delta * 8.4 * rateScaleFac, self2.lastAdsHoriz or 0, math.cos(self2.ti * walkRate * 0.475) * 0.3)
-	local smoothVert = l_Lerp(delta * 8.4 * rateScaleFac, self2.lastAdsVert or 0, math.sin(self2.ti * walkRate * 0.95) * 0.19)
-	self2.lastAdsHoriz, self2.lastAdsVert = smoothHoriz, smoothVert
-
-	pos:Add(riLocal * smoothHoriz * adsIntensity)
-	pos:Add(upLocal * smoothVert * adsIntensity)
+	pos:Add(riLocal * math.cos(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 0.25)
+	pos:Add(fwLocal * math.cos(self2.ti * walkRate) * breathIntensity * breatheMult2 * -0.15)
+	pos:Add(upLocal * math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 0.2)
+	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate) * breathIntensity * breatheMult2 * 1.2)
+	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * -1.5)
+	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate / 2) * breathIntensity * breatheMult2 * 2.5)
 
 	----[[WALKING]]----
-	local walkSpeedRatio = math.Clamp(self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed(), 0, 1.5)
-	local isSprinting = self:GetSprintProgress() > 0.1
-	local sprintInfluence = math.Clamp(self:GetSprintProgress() * 0.7, 0, 0.5)
-
-	local microMoveFactor = 1 - math.Clamp(self:GetIronSightsProgress(), 0.8, 1.0)
-
-	self2.walkTI = (self2.walkTI or 0) + delta * 145 / 60 * walkSpeedRatio
-
-	local baseBob = math.sin(self2.ti * walkRate * 0.55)
-	local microBob = math.sin(self2.ti * walkRate * 2.3) * 0.3 
-	local strideBob = math.sin(self2.ti * walkRate * 0.25) * 0.6
-
-	WalkPos.x = l_Lerp(delta * 8 * rateScaleFac, WalkPos.x, 
-		(-baseBob * 0.4 + microBob * 0.15 - strideBob * 0.2) * gunbob_intensity * walkIntensity)
-
-	WalkPos.y = l_Lerp(delta * 8 * rateScaleFac, WalkPos.y, 
-		(math.sin(self2.ti * walkRate * 1.1) * 0.3 + microBob * 0.1) * gunbob_intensity * walkIntensity)
-
-	WalkPosLagged.x = l_Lerp(delta * 5 * rateScaleFac, WalkPosLagged.x, 
-		-math.sin((self2.ti * walkRate * 0.45) + math.pi / 3.5) * gunbob_intensity * walkIntensity * 0.4)
-
-	WalkPosLagged.y = l_Lerp(delta * 7 * rateScaleFac, WalkPosLagged.y, 
-		math.sin(self2.ti * walkRate * 1.1 + math.pi / 3.5) * gunbob_intensity * walkIntensity * 0.35)
-
-	local sprintTilt = isSprinting and 0.8 or 1.0
-	local sprintSway = isSprinting and 1.2 or 1.0
-
-	pos:Add(WalkPos.x * riLocal * 0.85 * walkSpeedRatio * sprintTilt)
-	pos:Add(WalkPos.y * upLocal * 1.1 * walkSpeedRatio)
-
-	local adsFactor = 1 - math.Clamp(self:GetIronSightsProgress(), 0.5, 0.9)
-	local rotationIntensity = math.Clamp(walkSpeedRatio * 1.3, 0.7, 1.4) * adsFactor
-
-	ang:RotateAroundAxis(ri, -WalkPosLagged.y * -2.0 * rotationIntensity * sprintSway)
-	ang:RotateAroundAxis(up, WalkPos.x * 2.1 * rotationIntensity)
-	ang:RotateAroundAxis(fw, WalkPos.y * 8.5 * rotationIntensity)
-
-	ang:RotateAroundAxis(fw, microBob * 1.5 * rotationIntensity * microMoveFactor)
-
-	local terrainBob = math.sin(self2.ti * walkRate * 0.15) * 0.4
-	ang:RotateAroundAxis(ri, terrainBob * walkIntensity * 0.8 * microMoveFactor)
-
-	if walkSpeedRatio < 0.3 then
-		local idleSway = math.sin(self2.ti * walkRate * 0.8) * 0.3
-		ang:RotateAroundAxis(up, idleSway * (1 - walkSpeedRatio) * 0.5 * microMoveFactor)
-	end
+	self2.walkTI = (self2.walkTI or 0) + delta * 160 / 60 * self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed()
+	WalkPos.x = l_Lerp(delta * 5 * rateScaleFac, WalkPos.x, -math.sin(self2.ti * walkRate * 0.5) * gunbob_intensity * walkIntensity * 0.45)
+	WalkPos.y = l_Lerp(delta * 5 * rateScaleFac, WalkPos.y, math.sin(self2.ti * walkRate) / 1.5 * gunbob_intensity * walkIntensity * 0.2)
+	WalkPosLagged.x = l_Lerp(delta * 5 * rateScaleFac, WalkPosLagged.x, -math.sin((self2.ti * walkRate * 0.5) + math.pi / 3) * gunbob_intensity * walkIntensity * 0.5)
+	WalkPosLagged.y = l_Lerp(delta * 5 * rateScaleFac, WalkPosLagged.y, math.sin(self2.ti * walkRate + math.pi / 3) / 1.5 * gunbob_intensity * walkIntensity * 0.5)
+	pos:Add(WalkPos.x * riLocal * 0.4)
+	pos:Add(WalkPos.y * upLocal * 0.8)
+	ang:RotateAroundAxis(ri, -WalkPosLagged.y * 2)
+	ang:RotateAroundAxis(up, WalkPos.x * 3)
+	ang:RotateAroundAxis(fw, WalkPos.y * 7.5)
 
 	----[[CONSTANT OFFSET]]----
 	pos:Add(riLocal * walkVec.x * flip_v)
@@ -252,7 +194,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 
 	local JumpADSMul = (1 - (self2.IronSightsProgressUnpredicted or self:GetIronSightsProgress()) * 0.5)
 	local AnimSmoothing = 20
-	local Mul2 = 1.25
+	local Mul2 = 1.75
 
 	----[[LANDING]]----
 
@@ -310,7 +252,7 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local JumpingAngRi = InElasticEasedLerp(JumpingFractionAngRi, 0, 2)
 	local JumpingAngFw = InElasticEasedLerp(JumpingFractionAngFw, 0, 2)
 
-	JumpingFractionPosUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosUpLerp, JumpingPosUp * JumpADSMul * -1.5)
+	JumpingFractionPosUpLerp = Lerp(delta * AnimSmoothing, JumpingFractionPosUpLerp, JumpingPosUp * JumpADSMul * -0.75)
 	JumpingFractionAngRiLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngRiLerp, JumpingAngRi * JumpADSMul * -5)
 	JumpingFractionAngFwLerp = Lerp(delta * AnimSmoothing, JumpingFractionAngFwLerp, JumpingAngFw * JumpADSMul * -1.5)
 
@@ -460,3 +402,4 @@ function SWEP:UpdateEngineBob()
 	self2.BobScale = bscale
 	self2.SwayScale = fac
 end
+]==========]
