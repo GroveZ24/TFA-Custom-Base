@@ -294,7 +294,7 @@ end
 
 if SERVER then
 	util.AddNetworkString("TFA_ModSwitch")
-
+--[[
 	hook.Add("PlayerSwitchFlashlight", "TFA_Mod_Switch_Anim", function(plyv, toEnable)
 		local wepv = plyv:GetActiveWeapon()
 
@@ -313,6 +313,30 @@ if SERVER then
 				return false
 			end
 		end
+	end)
+]]
+hook.Add("PlayerSwitchFlashlight", "TFA_Mod_Switch_Anim", function(plyv, toEnable)
+    local wepv = plyv:GetActiveWeapon()
+    if not IsValid(wepv) then return end
+
+    if not wepv.HasFlashlight then
+        return
+    end
+
+    if wepv.UseModSwitchProceduralAnimation then
+        net.Start("TFA_ModSwitch")
+        net.Send(plyv)
+        plyv:ViewPunch(Angle(0.25, 0, -0.25))
+    else
+        if (wepv.GetStat and wepv:GetStatus() == TFA.Enum.STATUS_IDLE and wepv.EFTWeapon and wepv.EnableFlashlight and not plyv:KeyDown(IN_WALK)) then
+            local _, tanim = wepv:ChooseModSwitchAnim()
+            wepv:ScheduleStatus(TFA.Enum.STATUS_IDLE, wepv:GetActivityLength())
+        else
+            return false
+        end
+    end
+
+		return false
 	end)
 end
 
