@@ -646,14 +646,14 @@ if CLIENT then
         render.SetColorMaterial()
 
         --Draw line from muzzle to hit point
-        render.DrawLine(startPos, endPos, Color(0, 255, 0), true)
+        render.DrawLine(startPos, endPos, Color(255, 255, 0), true)
 
         --Small green box at muzzle
-        local boxSize = 1.5
+        local boxSize = 1
         render.DrawBox(startPos, Angle(0,0,0), Vector(-boxSize,-boxSize,-boxSize), Vector(boxSize,boxSize,boxSize), Color(0,255,0), true)
 
         --Slightly bigger red box at hit point
-        local hitBoxSize = 2.5
+        local hitBoxSize = 1
         render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(255,0,0), true)
     end)
 end
