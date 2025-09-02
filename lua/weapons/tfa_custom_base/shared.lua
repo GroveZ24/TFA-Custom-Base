@@ -520,3 +520,187 @@ function SWEP:GetLastRecoil()
     local val = self.LastRecoil or self:GetStatL("Primary.Recoil") or 0
     return tonumber(val) or 0
 end
+
+----[[FreeAim]]----
+--[[
+DEFINE_BASECLASS("tfa_gun_base")
+
+if CLIENT then
+    util.AddNetworkString = util.AddNetworkString or function() end
+
+    local function GetMuzzle(vm)
+        if not IsValid(vm) then return nil end
+        local attID = vm:LookupAttachment("muzzle")
+        local attData = attID and vm:GetAttachment(attID)
+        if not attData then
+            local boneID = vm:LookupBone("muzzle")
+            if boneID then
+                local pos, ang = vm:GetBonePosition(boneID)
+                if pos and ang then
+                    attData = { Pos = pos, Ang = ang }
+                end
+            end
+        end
+        return attData
+    end
+
+    local NextMuzzleSend = 0
+    hook.Add("Think", "TFA_Custom_Base_MuzzleUpdate", function()
+        local ply = LocalPlayer()
+        local wep = ply:GetActiveWeapon()
+        if not IsValid(wep) or not wep.IsTFAWeapon then return end
+        local vm = ply:GetViewModel()
+        if not IsValid(vm) then return end
+
+        if CurTime() >= NextMuzzleSend then
+            local att = GetMuzzle(vm)
+            if att then
+                net.Start("TFA_Custom_Base_UpdateMuzzle")
+                    net.WriteVector(att.Pos)
+                    net.WriteVector(att.Ang:Forward())
+                net.SendToServer()
+            end
+            NextMuzzleSend = CurTime() + 0.01
+        end
+    end)
+end
+
+if SERVER then
+    util.AddNetworkString("TFA_Custom_Base_UpdateMuzzle")
+    local playerMuzzleData = {}
+
+    net.Receive("TFA_Custom_Base_UpdateMuzzle", function(_, ply)
+        if not IsValid(ply) then return end
+        local pos = net.ReadVector()
+        local dir = net.ReadVector():GetNormalized()
+
+        if pos:DistToSqr(ply:EyePos()) > 10000 then return end
+        playerMuzzleData[ply] = { Pos = pos, Dir = dir }
+    end)
+
+    function SWEP:ShootFromMuzzle()
+        local ply = self:GetOwner()
+        if not IsValid(ply) then return end
+
+        local data = playerMuzzleData[ply]
+        local src, dir = ply:EyePos(), ply:EyeAngles():Forward()
+        if data then
+            src, dir = data.Pos, data.Dir
+            local trace = util.TraceLine({
+                start = ply:EyePos(),
+                endpos = src,
+                filter = ply,
+                mask = MASK_SHOT
+            })
+            if trace.Hit then
+                src = ply:EyePos() + dir * 5
+            end
+        end
+
+        ply:LagCompensation(true)
+
+        local bullet = {}
+        bullet.Num    = self:GetStatL("Primary.NumShots") or 1
+        bullet.Src    = src
+        bullet.Dir    = dir
+        bullet.Spread = Vector(self:GetStatL("Primary.Spread") or 0, self:GetStatL("Primary.Spread") or 0, 0)
+        bullet.Tracer = 1
+        bullet.Force  = self:GetStatL("Primary.Force") or 10
+        bullet.Damage = self:GetStatL("Primary.Damage") or 20
+        bullet.Ammo   = self:GetStatL("Primary.Ammo") or "SMG1"
+
+        ply:FireBullets(bullet)
+        ply:LagCompensation(false)
+    end
+
+    function SWEP:PrimaryAttack()
+        if not self:CanPrimaryAttack() then return end
+        self:ShootFromMuzzle()
+        self:TakePrimaryAmmo(1)
+        self:SetNextPrimaryFire(CurTime() + (60 / (self:GetStatL("Primary.RPM") or 600)))
+    end
+end
+]]
+
+
+----[[FreeAim debug]]----
+--[[
+if CLIENT then
+    local debugMuzzle3D = {}
+    local debugEnabled = CreateConVar("cl_tfa_debug_freeaim", "0", FCVAR_ARCHIVE + FCVAR_CLIENTCMD_CAN_EXECUTE, "Enable TFA muzzle debug") -- 0 = off, 1 = on
+
+    local function GetMuzzle(vm)
+        if not IsValid(vm) then return nil end
+        local attID = vm:LookupAttachment("muzzle")
+        local attData = attID and vm:GetAttachment(attID)
+        if not attData then
+            local boneID = vm:LookupBone("muzzle")
+            if boneID then
+                local pos, ang = vm:GetBonePosition(boneID)
+                if pos and ang then
+                    attData = { Pos = pos, Ang = ang }
+                end
+            end
+        end
+        return attData
+    end
+
+    hook.Add("Think", "TFA_Debug3D_UpdateMuzzle", function()
+        if debugEnabled:GetBool() == false then return end
+
+        local ply = LocalPlayer()
+        local wep = ply:GetActiveWeapon()
+        if not IsValid(wep) or not wep.IsTFAWeapon then return end
+        local vm = ply:GetViewModel()
+        if not IsValid(vm) then return end
+
+        local att = GetMuzzle(vm)
+        if att then
+            debugMuzzle3D[ply] = { pos = att.Pos, ang = att.Ang }
+        end
+    end)
+
+    hook.Add("PostDrawOpaqueRenderables", "TFA_Debug3D_DrawMuzzle", function()
+        if debugEnabled:GetBool() == false then return end
+
+        local ply = LocalPlayer()
+        local data = debugMuzzle3D[ply]
+        if not data or not data.pos or not data.ang then return end
+
+        local startPos = data.pos
+        local trace = util.TraceLine({
+            start = startPos,
+            endpos = startPos + data.ang:Forward() * 5000,
+            filter = ply
+        })
+        local endPos = trace.HitPos
+
+        render.SetColorMaterial()
+
+        render.DrawLine(startPos, endPos, Color(0, 255, 0), true)
+
+        local boxSize = 1.5
+        render.DrawBox(startPos, Angle(0,0,0), Vector(-boxSize,-boxSize,-boxSize), Vector(boxSize,boxSize,boxSize), Color(0,255,0), true)
+
+        local hitBoxSize = 2.5
+        render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(255,0,0), true)
+    end)
+end
+]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
