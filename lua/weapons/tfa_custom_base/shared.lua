@@ -522,16 +522,18 @@ function SWEP:GetLastRecoil()
 end
 
 ----[[FreeAim]]----
---[[
+
+--[[ CLIENT SIDE ]]--
 if CLIENT then
     util.AddNetworkString = util.AddNetworkString or function() end
 
+    -- Function to get muzzle attachment or fallback bone position
     local function GetMuzzle(vm)
         if not IsValid(vm) then return nil end
-        local attID = vm:LookupAttachment("muzzle")
+        local attID = vm:LookupAttachment("muzzle") -- try to find attachment
         local attData = attID and vm:GetAttachment(attID)
         if not attData then
-            local boneID = vm:LookupBone("muzzle")
+            local boneID = vm:LookupBone("muzzle") -- fallback to bone
             if boneID then
                 local pos, ang = vm:GetBonePosition(boneID)
                 if pos and ang then
@@ -543,6 +545,7 @@ if CLIENT then
     end
 
     local NextMuzzleSend = 0
+    -- Hook Think to periodically send muzzle position to server
     hook.Add("Think", "TFA_Custom_Base_MuzzleUpdate", function()
         local ply = LocalPlayer()
         local wep = ply:GetActiveWeapon()
@@ -553,37 +556,45 @@ if CLIENT then
         if CurTime() >= NextMuzzleSend then
             local att = GetMuzzle(vm)
             if att then
+                -- Send muzzle position and forward direction to server
                 net.Start("TFA_Custom_Base_UpdateMuzzle")
                     net.WriteVector(att.Pos)
                     net.WriteVector(att.Ang:Forward())
                 net.SendToServer()
             end
-            NextMuzzleSend = CurTime() + 0.01
+            NextMuzzleSend = CurTime() + 0.01 -- update every 0.01 seconds
         end
     end)
 end
 
+---[[ SERVER SIDE ]]---
+--[[
 if SERVER then
     util.AddNetworkString("TFA_Custom_Base_UpdateMuzzle")
     local playerMuzzleData = {}
 
+    --Receive muzzle info from client
     net.Receive("TFA_Custom_Base_UpdateMuzzle", function(_, ply)
         if not IsValid(ply) then return end
         local pos = net.ReadVector()
         local dir = net.ReadVector():GetNormalized()
 
+        --Anti-cheat: ensure the muzzle isn't too far from eyes
         if pos:DistToSqr(ply:EyePos()) > 10000 then return end
         playerMuzzleData[ply] = { Pos = pos, Dir = dir }
     end)
 
+    --Shoot from last known muzzle position
     function SWEP:ShootFromMuzzle()
         local ply = self:GetOwner()
         if not IsValid(ply) then return end
 
         local data = playerMuzzleData[ply]
-        local src, dir = ply:EyePos(), ply:EyeAngles():Forward()
+        local src, dir = ply:EyePos(), ply:EyeAngles():Forward() --fallback if no data
         if data then
             src, dir = data.Pos, data.Dir
+
+            --Prevent shooting from inside walls
             local trace = util.TraceLine({
                 start = ply:EyePos(),
                 endpos = src,
@@ -611,6 +622,7 @@ if SERVER then
         ply:LagCompensation(false)
     end
 
+    --Override PrimaryAttack to use muzzle shooting
     function SWEP:PrimaryAttack()
         if not self:CanPrimaryAttack() then return end
         self:ShootFromMuzzle()
@@ -620,13 +632,14 @@ if SERVER then
 end
 ]]
 
-
-----[[FreeAim debug]]----
+----[[FreeAim Debug]]----
 --[[
 if CLIENT then
     local debugMuzzle3D = {}
-    local debugEnabled = CreateConVar("cl_tfa_debug_freeaim", "0", FCVAR_ARCHIVE + FCVAR_CLIENTCMD_CAN_EXECUTE, "Enable TFA muzzle debug") -- 0 = off, 1 = on
+    --ConVar to toggle muzzle debug visualization
+    local debugEnabled = CreateConVar("cl_tfa_debug_freeaim", "0", FCVAR_ARCHIVE + FCVAR_CLIENTCMD_CAN_EXECUTE, "Enable TFA muzzle debug") 
 
+    --Function to get muzzle attachment or bone
     local function GetMuzzle(vm)
         if not IsValid(vm) then return nil end
         local attID = vm:LookupAttachment("muzzle")
@@ -643,8 +656,9 @@ if CLIENT then
         return attData
     end
 
+    --Update muzzle debug data each frame
     hook.Add("Think", "TFA_Debug3D_UpdateMuzzle", function()
-        if debugEnabled:GetBool() == false then return end
+        if not debugEnabled:GetBool() then return end
 
         local ply = LocalPlayer()
         local wep = ply:GetActiveWeapon()
@@ -658,14 +672,16 @@ if CLIENT then
         end
     end)
 
+    --Draw the muzzle debug lines and boxes
     hook.Add("PostDrawOpaqueRenderables", "TFA_Debug3D_DrawMuzzle", function()
-        if debugEnabled:GetBool() == false then return end
+        if not debugEnabled:GetBool() then return end
 
         local ply = LocalPlayer()
         local data = debugMuzzle3D[ply]
         if not data or not data.pos or not data.ang then return end
 
         local startPos = data.pos
+        --Trace to see where the bullet would hit
         local trace = util.TraceLine({
             start = startPos,
             endpos = startPos + data.ang:Forward() * 5000,
@@ -675,11 +691,14 @@ if CLIENT then
 
         render.SetColorMaterial()
 
+        --Draw line from muzzle to hit point
         render.DrawLine(startPos, endPos, Color(0, 255, 0), true)
 
+        --Small green box at muzzle
         local boxSize = 1.5
         render.DrawBox(startPos, Angle(0,0,0), Vector(-boxSize,-boxSize,-boxSize), Vector(boxSize,boxSize,boxSize), Color(0,255,0), true)
 
+        --Slightly bigger red box at hit point
         local hitBoxSize = 2.5
         render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(255,0,0), true)
     end)

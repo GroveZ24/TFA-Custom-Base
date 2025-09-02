@@ -147,86 +147,109 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local breatheMult1 = (1 - breatheMult2) - (self:GetInspectingProgress() * 0.75)
 
 	----[[BREATHING]]----
-	local breathMain = math.sin(self2.ti * walkRate * 0.7)
-	local breathSecondary = math.cos(self2.ti * walkRate * 0.35)
+	--Breathing animation system - creates natural weapon sway when not aiming
+	local breathMain = math.sin(self2.ti * walkRate * 0.7)          --Primary breathing wave (slower)
+	local breathSecondary = math.cos(self2.ti * walkRate * 0.35)    --Secondary breathing wave (faster)
 
+	--Positional breathing movements - side-to-side and vertical sway
 	pos:Add(riLocal * (breathMain * 0.8 - breathSecondary * 0.4) * flip_v * breathIntensity * breatheMult1 * 0.15)
 	pos:Add(upLocal * (breathMain * 1.2 + breathSecondary * 0.3) * breathIntensity * breatheMult1 * 0.25)
 
+	--Rotational breathing movements - weapon tilting and rolling
 	ang:RotateAroundAxis(ri, breathMain * breathIntensity * breatheMult1 * 1.8)
 	ang:RotateAroundAxis(up, (breathMain * 0.5 - breathSecondary * 0.7) * breathIntensity * breatheMult1 * -0.35)
 	ang:RotateAroundAxis(fw, breathSecondary * breathIntensity * breatheMult1 * -2.2)
 
+	--Micro-breathing - high frequency subtle movements for realism
 	local microBreath = math.sin(self2.ti * walkRate * 2.5) * 0.2
 	ang:RotateAroundAxis(up, microBreath * breathIntensity * breatheMult1 * 0.5)
 	ang:RotateAroundAxis(fw, microBreath * breathIntensity * breatheMult1 * -0.8)
 
+	--Breathing damping - reduces breathing intensity when moving
 	local breathDamping = 1 - math.Clamp(walkIntensitySmooth * 0.7, 0, 0.6)
 	pos:Add(riLocal * breathMain * flip_v * breathIntensity * breatheMult1 * 0.1 * breathDamping)
 	ang:RotateAroundAxis(ri, breathMain * breathIntensity * breatheMult1 * 1.0 * breathDamping)
 
 	----[[ADS WALKING]]----
-	local adsIntensity = breathIntensity * breatheMult2 * 0.95  // -5%
+	--Aim Down Sight walking animations - subtle movements while aiming
+	local adsIntensity = breathIntensity * breatheMult2 * 0.95  --Reduced intensity for ADS
 	local walkSpeedRatio = math.Clamp(self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed(), 0, 0.8)
 
-	pos:Add(riLocal * math.cos(self2.ti * walkRate * 0.475) * adsIntensity * 0.3)       // -5%
-	pos:Add(fwLocal * math.cos(self2.ti * walkRate * 0.95) * adsIntensity * -0.19)      // -5%
-	pos:Add(upLocal * math.sin(self2.ti * walkRate * 0.95) * adsIntensity * 0.19)       // -5%
+	--ADS positional movements - minimal weapon sway while aiming
+	pos:Add(riLocal * math.cos(self2.ti * walkRate * 0.475) * adsIntensity * 0.3)
+	pos:Add(fwLocal * math.cos(self2.ti * walkRate * 0.95) * adsIntensity * -0.19)
+	pos:Add(upLocal * math.sin(self2.ti * walkRate * 0.95) * adsIntensity * 0.19)
 
-	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate * 0.95) * adsIntensity * 1.14)   // -5%
-	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate * 0.475) * adsIntensity * -1.71) // -5%
-	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate * 0.475) * adsIntensity * 2.66)  // -5%
+	--ADS rotational movements - controlled weapon tilting while aiming
+	ang:RotateAroundAxis(ri, math.sin(self2.ti * walkRate * 0.95) * adsIntensity * 1.14)
+	ang:RotateAroundAxis(up, math.sin(self2.ti * walkRate * 0.475) * adsIntensity * -1.71)
+	ang:RotateAroundAxis(fw, math.sin(self2.ti * walkRate * 0.475) * adsIntensity * 2.66)
 
+	--Smooth interpolation for ADS movements - prevents jerky animations
 	local smoothHoriz = l_Lerp(delta * 8.4 * rateScaleFac, self2.lastAdsHoriz or 0, math.cos(self2.ti * walkRate * 0.475) * 0.3)
 	local smoothVert = l_Lerp(delta * 8.4 * rateScaleFac, self2.lastAdsVert or 0, math.sin(self2.ti * walkRate * 0.95) * 0.19)
 	self2.lastAdsHoriz, self2.lastAdsVert = smoothHoriz, smoothVert
 
+	--Apply smoothed ADS movements
 	pos:Add(riLocal * smoothHoriz * adsIntensity)
 	pos:Add(upLocal * smoothVert * adsIntensity)
 
 	----[[WALKING]]----
+	--Main walking animation system - handles weapon bob during movement
 	local walkSpeedRatio = math.Clamp(self:GetOwner():GetVelocity():Length2D() / self:GetOwner():GetWalkSpeed(), 0, 1.5)
 	local isSprinting = self:GetSprintProgress() > 0.1
 	local sprintInfluence = math.Clamp(self:GetSprintProgress() * 0.7, 0, 0.5)
 
+	--Micro-movement factor - disables subtle movements while aiming for stability
 	local microMoveFactor = 1 - math.Clamp(self:GetIronSightsProgress(), 0.8, 1.0)
 
+	--Time accumulation for walking animations
 	self2.walkTI = (self2.walkTI or 0) + delta * 145 / 60 * walkSpeedRatio
 
-	local baseBob = math.sin(self2.ti * walkRate * 0.55)
-	local microBob = math.sin(self2.ti * walkRate * 2.3) * 0.3 
-	local strideBob = math.sin(self2.ti * walkRate * 0.25) * 0.6
+	--Multi-layer walking waves - creates complex natural movement
+	local baseBob = math.sin(self2.ti * walkRate * 0.55)           --Base walking wave
+	local microBob = math.sin(self2.ti * walkRate * 2.3) * 0.3     --High-frequency micro-movements
+	local strideBob = math.sin(self2.ti * walkRate * 0.25) * 0.6   --Long stride movements
 
+	--Horizontal and vertical walking position interpolation
 	WalkPos.x = l_Lerp(delta * 8 * rateScaleFac, WalkPos.x, 
 		(-baseBob * 0.4 + microBob * 0.15 - strideBob * 0.2) * gunbob_intensity * walkIntensity)
 
 	WalkPos.y = l_Lerp(delta * 8 * rateScaleFac, WalkPos.y, 
 		(math.sin(self2.ti * walkRate * 1.1) * 0.3 + microBob * 0.1) * gunbob_intensity * walkIntensity)
 
+	--Lagged walking positions - creates natural follow-through effect
 	WalkPosLagged.x = l_Lerp(delta * 5 * rateScaleFac, WalkPosLagged.x, 
 		-math.sin((self2.ti * walkRate * 0.45) + math.pi / 3.5) * gunbob_intensity * walkIntensity * 0.4)
 
 	WalkPosLagged.y = l_Lerp(delta * 7 * rateScaleFac, WalkPosLagged.y, 
 		math.sin(self2.ti * walkRate * 1.1 + math.pi / 3.5) * gunbob_intensity * walkIntensity * 0.35)
 
-	local sprintTilt = isSprinting and 0.8 or 1.0
-	local sprintSway = isSprinting and 1.2 or 1.0
+	--Sprint influence adjustments
+	local sprintTilt = isSprinting and 0.8 or 1.0  --Weapon tilt during sprint
+	local sprintSway = isSprinting and 1.2 or 1.0  --Weapon sway during sprint
 
+	--Apply walking positional movements
 	pos:Add(WalkPos.x * riLocal * 0.85 * walkSpeedRatio * sprintTilt)
 	pos:Add(WalkPos.y * upLocal * 1.1 * walkSpeedRatio)
 
+	--Aim Down Sight factor - reduces rotation intensity when aiming
 	local adsFactor = 1 - math.Clamp(self:GetIronSightsProgress(), 0.5, 0.9)
 	local rotationIntensity = math.Clamp(walkSpeedRatio * 1.3, 0.7, 1.4) * adsFactor
 
+	--Main walking rotations - weapon tilting and rolling during movement
 	ang:RotateAroundAxis(ri, -WalkPosLagged.y * -2.0 * rotationIntensity * sprintSway)
 	ang:RotateAroundAxis(up, WalkPos.x * 2.1 * rotationIntensity)
 	ang:RotateAroundAxis(fw, WalkPos.y * 8.5 * rotationIntensity)
 
+	--Micro-movements during walking - disabled while aiming
 	ang:RotateAroundAxis(fw, microBob * 1.5 * rotationIntensity * microMoveFactor)
 
+	--Terrain reaction - simulates ground unevenness
 	local terrainBob = math.sin(self2.ti * walkRate * 0.15) * 0.4
 	ang:RotateAroundAxis(ri, terrainBob * walkIntensity * 0.8 * microMoveFactor)
 
+	--Idle sway - subtle movements when walking very slowly
 	if walkSpeedRatio < 0.3 then
 		local idleSway = math.sin(self2.ti * walkRate * 0.8) * 0.3
 		ang:RotateAroundAxis(up, idleSway * (1 - walkSpeedRatio) * 0.5 * microMoveFactor)
