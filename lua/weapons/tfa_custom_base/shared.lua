@@ -523,8 +523,6 @@ end
 
 ----[[FreeAim]]----
 --[[
-DEFINE_BASECLASS("tfa_gun_base")
-
 if CLIENT then
     util.AddNetworkString = util.AddNetworkString or function() end
 
