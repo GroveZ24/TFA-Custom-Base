@@ -147,8 +147,8 @@ function SWEP:WalkBob(pos, ang, breathIntensity, walkIntensity, rate, ftv)
 	local breatheMult1 = (1 - breatheMult2) - (self:GetInspectingProgress() * 0.75)
 
 	----[[BREATHING]]----
-	local breathMain = math.sin(self2.ti * walkRate * 0.7)  // Основное дыхание
-	local breathSecondary = math.cos(self2.ti * walkRate * 0.35)  // Вторичное дыхание (в 2 раза медленнее)
+	local breathMain = math.sin(self2.ti * walkRate * 0.7)
+	local breathSecondary = math.cos(self2.ti * walkRate * 0.35)
 
 	pos:Add(riLocal * (breathMain * 0.8 - breathSecondary * 0.4) * flip_v * breathIntensity * breatheMult1 * 0.15)
 	pos:Add(upLocal * (breathMain * 1.2 + breathSecondary * 0.3) * breathIntensity * breatheMult1 * 0.25)
