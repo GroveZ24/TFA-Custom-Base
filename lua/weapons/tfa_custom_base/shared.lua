@@ -521,84 +521,139 @@ function SWEP:GetLastRecoil()
     return tonumber(val) or 0
 end
 
----[[ SERVER SIDE ]]---
+----[[MFire]]----
 --[[
 if SERVER then
-    util.AddNetworkString("TFA_Custom_Base_UpdateMuzzle")
-    local playerMuzzleData = {}
+    -- Create a network message to notify the server about hits from client
+    util.AddNetworkString("TFA_Custom_Base_HitNotify")
 
-    --Receive muzzle info from client
-    net.Receive("TFA_Custom_Base_UpdateMuzzle", function(_, ply)
-        if not IsValid(ply) then return end
-        local pos = net.ReadVector()
-        local dir = net.ReadVector():GetNormalized()
+    -- Receive hit info from client
+    net.Receive("TFA_Custom_Base_HitNotify", function(_, ply)
+        -- Read hit position, hit entity, and damage
+        local hitPos = net.ReadVector()
+        local ent = net.ReadEntity()
+        local dmg = net.ReadFloat()
 
-        --Anti-cheat: ensure the muzzle isn't too far from eyes
-        if pos:DistToSqr(ply:EyePos()) > 10000 then return end
-        playerMuzzleData[ply] = { Pos = pos, Dir = dir }
-    end)
-
-    --Shoot from last known muzzle position
-    function SWEP:ShootFromMuzzle()
-        local ply = self:GetOwner()
-        if not IsValid(ply) then return end
-
-        local data = playerMuzzleData[ply]
-        local src, dir = ply:EyePos(), ply:EyeAngles():Forward() --fallback if no data
-        if data then
-            src, dir = data.Pos, data.Dir
-
-            --Prevent shooting from inside walls
-            local trace = util.TraceLine({
-                start = ply:EyePos(),
-                endpos = src,
-                filter = ply,
-                mask = MASK_SHOT
-            })
-            if trace.Hit then
-                src = ply:EyePos() + dir * 5
-            end
+        -- Apply damage only if entity is valid
+        if IsValid(ent) then
+            local dmgInfo = DamageInfo()
+            dmgInfo:SetAttacker(ply)                      -- The player who shot
+            dmgInfo:SetInflictor(ply:GetActiveWeapon())  -- Weapon causing damage
+            dmgInfo:SetDamage(dmg)
+            dmgInfo:SetDamagePosition(hitPos)            -- Where the bullet hit
+            dmgInfo:SetDamageType(DMG_BULLET)           -- Set damage type as bullet
+            ent:TakeDamageInfo(dmgInfo)
         end
+    end)
+end
 
-        ply:LagCompensation(true)
+-- Function to get the muzzle position and forward vector
+-- Tries attachment first, then fallback bone, finally player's eye position
+local function GetMuzzlePos(wep, ply)
+    local vm = ply:GetViewModel()
+    if not IsValid(vm) then return ply:EyePos(), ply:EyeAngles():Forward() end
 
-        local bullet = {}
-        bullet.Num    = self:GetStatL("Primary.NumShots") or 1
-        bullet.Src    = src
-        bullet.Dir    = dir
-        bullet.Spread = Vector(self:GetStatL("Primary.Spread") or 0, self:GetStatL("Primary.Spread") or 0, 0)
-        bullet.Tracer = 1
-        bullet.Force  = self:GetStatL("Primary.Force") or 10
-        bullet.Damage = self:GetStatL("Primary.Damage") or 20
-        bullet.Ammo   = self:GetStatL("Primary.Ammo") or "SMG1"
-
-        ply:FireBullets(bullet)
-        ply:LagCompensation(false)
+    -- Try to get "muzzle" attachment
+    local attID = vm:LookupAttachment("muzzle")
+    local attData = attID and vm:GetAttachment(attID)
+    if attData then
+        return attData.Pos, attData.Ang:Forward()
     end
 
-    --Override PrimaryAttack to use muzzle shooting
-    function SWEP:PrimaryAttack()
-        if not self:CanPrimaryAttack() then return end
-        self:ShootFromMuzzle()
-        self:TakePrimaryAmmo(1)
-        self:SetNextPrimaryFire(CurTime() + (60 / (self:GetStatL("Primary.RPM") or 600)))
+    -- Fallback to bone if attachment missing
+    local boneID = vm:LookupBone("muzzle")
+    if boneID then
+        local pos, ang = vm:GetBonePosition(boneID)
+        if pos and ang then
+            return pos, ang:Forward()
+        end
+    end
+
+    -- Final fallback: player's eyes
+    return ply:EyePos(), ply:EyeAngles():Forward()
+end
+
+-- Main shooting function using the muzzle position
+function SWEP:ShootFromMuzzle()
+    local ply = self:GetOwner()
+    if not IsValid(ply) then return end
+
+    local src, dir = GetMuzzlePos(self, ply)  -- Get muzzle position and direction
+
+    -- Define bullet data
+    local bullet = {}
+    bullet.Num    = self:GetStatL("Primary.NumShots") or 1
+    bullet.Src    = src
+    bullet.Dir    = dir
+    bullet.Spread = Vector(self:GetStatL("Primary.Spread") or 0, self:GetStatL("Primary.Spread") or 0, 0)
+    bullet.Tracer = 1
+    bullet.Force  = self:GetStatL("Primary.Force") or 10
+    bullet.Damage = self:GetStatL("Primary.Damage") or 20
+    bullet.Ammo   = self:GetStatL("Primary.Ammo") or "SMG1"
+
+    -- Fire bullets locally (client or server)
+    ply:FireBullets(bullet)
+
+    -- Client-side hit calculation for minimal latency
+    -- Sends only hit notifications to server; server applies real damage
+    if CLIENT then
+        local trace = util.TraceLine({
+            start = src,
+            endpos = src + dir * 10000, -- trace long enough to reach distant targets
+            filter = ply,               -- ignore self
+            mask = MASK_SHOT
+        })
+
+        -- If trace hits a valid entity, notify server
+        if trace.Hit and IsValid(trace.Entity) then
+            net.Start("TFA_Custom_Base_HitNotify") -- Start network message
+            net.WriteVector(trace.HitPos)          -- Hit position
+            net.WriteEntity(trace.Entity)          -- Hit entity
+            net.WriteFloat(bullet.Damage)          -- Damage amount
+            net.SendToServer()                     -- Send to server for actual damage
+        end
     end
 end
+
+-- Override PrimaryAttack to use the custom muzzle shooting
+function SWEP:PrimaryAttack()
+    if not self:CanPrimaryAttack() then return end
+
+    -- Shoot using muzzle
+    self:ShootFromMuzzle()
+
+    -- Reduce ammo
+    self:TakePrimaryAmmo(1)
+
+    -- Set next fire time based on weapon RPM
+    self:SetNextPrimaryFire(CurTime() + (60 / (self:GetStatL("Primary.RPM") or 600)))
+end
+
+-- Notes / nuances:
+-- 1. Using client-side hit calculation reduces perceived latency dramatically.
+-- 2. Server trusts the client for hit positions; this is acceptable for singleplayer or cheat-agnostic setups.
+-- 3. Using GetMuzzlePos ensures bullets fire from the weapon's visible muzzle rather than eye position.
+-- 4. Damage is applied on server to maintain proper entity state across clients.
+-- 5. This approach keeps the feel instant, avoids laggy bullets, and is compatible with singleplayer and multiplayer.
 ]]
 
-----[[FreeAim Debug]]----
---[[
+----[[MFire Debug]]----
+
 if CLIENT then
     local debugMuzzle3D = {}
-    --ConVar to toggle muzzle debug visualization
-    local debugEnabled = CreateConVar("cl_tfa_debug_freeaim", "0", FCVAR_ARCHIVE + FCVAR_CLIENTCMD_CAN_EXECUTE, "Enable TFA muzzle debug") 
+    -- ConVar to toggle muzzle debug visualization
+    -- This allows players/devs to enable or disable the muzzle debug display
+    local debugEnabled = CreateConVar("cl_tfa_debug_mfire", "0", FCVAR_ARCHIVE + FCVAR_CLIENTCMD_CAN_EXECUTE, "Enable TFA muzzle debug") 
 
-    --Function to get muzzle attachment or bone
+    -- Function to get the muzzle attachment or fallback to a bone
+    -- vm: the viewmodel of the weapon
+    -- Returns a table {Pos = vector, Ang = angle} or nil if not found
     local function GetMuzzle(vm)
         if not IsValid(vm) then return nil end
-        local attID = vm:LookupAttachment("muzzle")
+        local attID = vm:LookupAttachment("muzzle") -- Try to find the "muzzle" attachment
         local attData = attID and vm:GetAttachment(attID)
         if not attData then
+            -- If attachment doesn't exist, fallback to a bone named "muzzle"
             local boneID = vm:LookupBone("muzzle")
             if boneID then
                 local pos, ang = vm:GetBonePosition(boneID)
@@ -610,23 +665,24 @@ if CLIENT then
         return attData
     end
 
-    --Update muzzle debug data each frame
+    -- Hook to update muzzle position every frame
     hook.Add("Think", "TFA_Debug3D_UpdateMuzzle", function()
         if not debugEnabled:GetBool() then return end
 
         local ply = LocalPlayer()
         local wep = ply:GetActiveWeapon()
-        if not IsValid(wep) or not wep.IsTFAWeapon then return end
+        if not IsValid(wep) or not wep.IsTFAWeapon then return end -- Only track TFA weapons
         local vm = ply:GetViewModel()
         if not IsValid(vm) then return end
 
         local att = GetMuzzle(vm)
         if att then
+            -- Store the muzzle position and angle for later rendering
             debugMuzzle3D[ply] = { pos = att.Pos, ang = att.Ang }
         end
     end)
 
-    --Draw the muzzle debug lines and boxes
+    -- Hook to draw the muzzle debug visuals
     hook.Add("PostDrawOpaqueRenderables", "TFA_Debug3D_DrawMuzzle", function()
         if not debugEnabled:GetBool() then return end
 
@@ -635,29 +691,26 @@ if CLIENT then
         if not data or not data.pos or not data.ang then return end
 
         local startPos = data.pos
-        --Trace to see where the bullet would hit
+        -- Perform a trace line from the muzzle forward to visualize bullet trajectory
         local trace = util.TraceLine({
             start = startPos,
-            endpos = startPos + data.ang:Forward() * 5000,
-            filter = ply
+            endpos = startPos + data.ang:Forward() * 5000, -- extend far ahead
+            filter = ply -- ignore the player
         })
-        local endPos = trace.HitPos
+        local endPos = trace.HitPos -- The point where the trace hits something
 
-        render.SetColorMaterial()
+        render.SetColorMaterial() -- Prepare rendering
 
-        --Draw line from muzzle to hit point
-        render.DrawLine(startPos, endPos, Color(255, 255, 0), true)
+        -- Draw a green line from the muzzle to the hit point
+        render.DrawLine(startPos, endPos, Color(0, 255, 0), true)
 
-        --Small green box at muzzle
-        local boxSize = 1
-        render.DrawBox(startPos, Angle(0,0,0), Vector(-boxSize,-boxSize,-boxSize), Vector(boxSize,boxSize,boxSize), Color(0,255,0), true)
-
-        --Slightly bigger red box at hit point
+        -- Draw a small green cube/sphere at the hit point for visualization
+        -- This shows where the bullet would impact
         local hitBoxSize = 1
-        render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(255,0,0), true)
+        render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(0,255,0), true)
     end)
 end
-]]
+
 
 
 
