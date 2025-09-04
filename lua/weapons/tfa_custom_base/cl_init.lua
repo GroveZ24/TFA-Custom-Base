@@ -6,4 +6,4 @@ include("common/viewmodel.lua")
 
 include("client/bobcode.lua")
 include("client/viewmodel.lua")
-//include("client/cl_muzzle.lua")
+include("client/laser.lua")

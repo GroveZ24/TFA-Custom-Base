@@ -13,4 +13,4 @@ AddCSLuaFile("cl_init.lua")
 
 AddCSLuaFile("client/viewmodel.lua")
 AddCSLuaFile("client/bobcode.lua")
-//AddCSLuaFile("client/cl_muzzle.lua")
+AddCSLuaFile("client/laser.lua")

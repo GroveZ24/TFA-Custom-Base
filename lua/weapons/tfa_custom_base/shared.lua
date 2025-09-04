@@ -340,6 +340,8 @@ hook.Add("PlayerSwitchFlashlight", "TFA_Mod_Switch_Anim", function(plyv, toEnabl
 	end)
 end
 
+
+
 --Example of using animation instead is down below:
 
 --[[
@@ -710,21 +712,3 @@ if CLIENT then
         render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(0,255,0), true)
     end)
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
