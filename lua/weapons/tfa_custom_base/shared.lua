@@ -640,7 +640,7 @@ end
 ]]
 
 ----[[MFire Debug]]----
-
+--[[
 if CLIENT then
     local debugMuzzle3D = {}
     -- ConVar to toggle muzzle debug visualization
@@ -712,3 +712,4 @@ if CLIENT then
         render.DrawBox(endPos, Angle(0,0,0), Vector(-hitBoxSize,-hitBoxSize,-hitBoxSize), Vector(hitBoxSize,hitBoxSize,hitBoxSize), Color(0,255,0), true)
     end)
 end
+]]

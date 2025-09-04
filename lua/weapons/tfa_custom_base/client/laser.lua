@@ -23,7 +23,7 @@ end
 -- Console command to switch the laser mode (IR <-> Normal)
 -- This allows users to toggle the laser mode manually via a bind or console command.
 -- This does not turn off the laser; it only switches the mode.
-concommand.Add("switch_tfa_laser", function()
+concommand.Add("cl_tfa_laser_switch", function()
     local ply = LocalPlayer()
     if not IsValid(ply) then return end
     local wep = ply:GetActiveWeapon()
