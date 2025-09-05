@@ -17,11 +17,12 @@ ATTACHMENT.WeaponTable = {
 	},
 	["LaserSightAttachment"] = function(wep,stat) return wep.LaserSightModAttachment end,
 	["LaserSightAttachmentWorld"] = function(wep,stat) return wep.LaserSightModAttachmentWorld or wep.LaserSightModAttachment end
+	["LaserSoundToggleOn"] = Sound("TFA_GROVEZ.SHARED.LASER_ON"),
+	["LaserSoundToggleOff"] = Sound("TFA_GROVEZ.SHARED.LASER_OFF"),
 }
 
 ATTACHMENT.AttachSound = "TFA_GROVEZ.SHARED.MENU_MOD_SELECT"
 ATTACHMENT.DetachSound = "TFA_GROVEZ.SHARED.MENU_MOD_DESELECT"
-
 
 if not TFA_ATTACHMENT_ISUPDATING then
 	TFAUpdateAttachments()

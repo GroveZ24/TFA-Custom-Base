@@ -340,7 +340,16 @@ hook.Add("PlayerSwitchFlashlight", "TFA_Mod_Switch_Anim", function(plyv, toEnabl
 	end)
 end
 
-
+if SERVER then
+    util.AddNetworkString("TFA_LaserModSwitch")
+    net.Receive("TFA_LaserModSwitch", function(len, ply)
+        local wep = ply:GetActiveWeapon()
+        if not IsValid(wep) then return end
+        net.Start("TFA_ModSwitch")
+        net.Send(ply)
+        ply:ViewPunch(Angle(0.15, 0, -0.15))
+    end)
+end
 
 --Example of using animation instead is down below:
 
