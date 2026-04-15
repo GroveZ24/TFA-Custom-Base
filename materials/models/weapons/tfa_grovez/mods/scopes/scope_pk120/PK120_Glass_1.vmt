@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$basetexture"				"models\weapons\tfa_grovez\alpha_50"
+	"$basetexture"				"models\weapons\tfa_grovez\alpha_30"
 	"$bumpmap"					"dev\bump_normal"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
 	"$translucent"				"1"

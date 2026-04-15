@@ -1,13 +1,13 @@
 "VertexLitGeneric"
 {
-	"$basetexture"				"models\weapons\tfa_grovez\alpha_50"
+	"$basetexture"				"models\weapons\tfa_grovez\alpha_20"
 	"$bumpmap"					"dev\bump_normal"
 	"$phongwarptexture"			"models\weapons\tfa_grovez\phongwarp_metal"
 	"$translucent"				"1"
 
 	"$envmap"					"cubemaps\hdri_parking"
 	"$envmapfresnel"			".25"
-	"$envmapcoefficient"		"[5 0 0]"
+	"$envmapcoefficient"		"[7.5 1 0]"
 
 	"$phong"					"1"
 	"$phongexponent"			"50"
