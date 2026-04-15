@@ -7,7 +7,7 @@
 
 	"$envmap"					"cubemaps\hdri_parking"
 	"$envmapfresnel"			"1"
-	"$envmapcoefficient"		"[5 2 0]"
+	"$envmapcoefficient"		"[15 3 0]"
 
 	"$phong"					"1"
 	"$phongexponent"			"50"

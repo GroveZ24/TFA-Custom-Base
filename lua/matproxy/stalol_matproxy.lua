@@ -2,7 +2,7 @@
 
 local basevec = Vector(1, 1, 1)
 local resvar = "$envmaptint"
-local HDRFix = 1
+local HDRFix = 0
 
 matproxy.Add({
 	name = "TFACubemapMultiplier",
@@ -20,7 +20,7 @@ matproxy.Add({
 			local lightvec = render.GetLightColor(ent:GetPos())
 
 			if render.GetHDREnabled() then
-				HDRFix = 10
+				HDRFix = 25
 			else
 				HDRFix = 1
 			end

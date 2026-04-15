@@ -2,8 +2,8 @@ if not ATTACHMENT then
 	ATTACHMENT = {}
 end
 
-ATTACHMENT.Name = "Zenitco Perst-4"
-ATTACHMENT.ShortName = "Perst4"
+ATTACHMENT.Name = "Zenitco Perst 5"
+ATTACHMENT.ShortName = "ZP5"
 ATTACHMENT.Icon = "entities/tfa_qmark.png"
 ATTACHMENT.Description = {
 }
@@ -16,7 +16,7 @@ ATTACHMENT.WeaponTable = {
 		}
 	},
 	["LaserSightAttachment"] = function(wep,stat) return wep.LaserSightModAttachment end,
-	["LaserSightAttachmentWorld"] = function(wep,stat) return wep.LaserSightModAttachmentWorld or wep.LaserSightModAttachment end,
+	["LaserSightAttachmentWorld"] = function(wep,stat) return wep.LaserSightModAttachmentWorld or wep.LaserSightModAttachment end
 	["LaserSoundToggleOn"] = Sound("TFA_GROVEZ.SHARED.LASER_ON"),
 	["LaserSoundToggleOff"] = Sound("TFA_GROVEZ.SHARED.LASER_OFF"),
 }
